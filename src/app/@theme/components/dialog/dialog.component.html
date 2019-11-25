@@ -1,0 +1,27 @@
+<nb-card *ngIf="type === 'alert'" class="dialog-card">
+	<nb-card-header>{{ title }}</nb-card-header>
+	<nb-card-body [innerHTML]="body"></nb-card-body>
+	<nb-card-footer>
+		<button (click)="dismiss()" nbButton status="primary">Dismiss Dialog</button>
+	</nb-card-footer>
+</nb-card>
+
+<nb-card *ngIf="type === 'prompt'">
+	<nb-card-header>{{ title }}</nb-card-header>
+	<nb-card-body>
+		<input #name nbInput placeholder="Name">
+	</nb-card-body>
+	<nb-card-footer>
+		<button (click)="dismiss()" nbButton status="danger">Cancel</button>
+		<button (click)="submit(name.value)" nbButton status="success">Submit</button>
+	</nb-card-footer>
+</nb-card>
+
+<nb-card *ngIf="type === 'confirm'">
+	<nb-card-header>{{ title }}</nb-card-header>
+	<nb-card-body>{{ body }}</nb-card-body>
+	<nb-card-footer>
+		<button (click)="dismiss()" nbButton status="danger">Cancel</button>
+		<button (click)="submit(true)" nbButton status="success">Submit</button>
+	</nb-card-footer>
+</nb-card>

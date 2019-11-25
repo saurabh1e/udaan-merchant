@@ -1,0 +1,593 @@
+<nb-card class="Request-Form p-3" style="width:100vw;height: 100vh;overflow-y: auto">
+	<nb-card-body>
+		<ng-container *ngIf="step === 1">
+			<div class="d-flex justify-content-end">
+				<nb-icon (click)="cancel()" [options]="{ height: 42, width: 42, fill: 'red' }" icon="close"></nb-icon>
+			</div>
+			<div class="d-flex flex-row justify-content-around align-items-center" style="height: 100%">
+				<div>
+					<button (click)="setOrderType(false)" nbButton shape="rectangle" size="large" status="info">GET
+						RIDER NOW
+					</button>
+				</div>
+				<div>
+					<button (click)="setOrderType(true)" nbButton shape="rectangle" size="large" status="info">SCHEDULE
+						JOB
+					</button>
+				</div>
+			</div>
+		</ng-container>
+
+		<div [hidden]="step !== 2 || orderData.is_duty">
+			<div *ngIf="!orderData.id" class="d-flex justify-content-start">
+				<nb-icon (click)="goBack()" icon="arrow-back-outline"></nb-icon>
+			</div>
+			<div class="d-flex justify-content-between">
+				<form #orderForm=ngForm class="mt-3">
+
+					<div class="form-group row">
+						<div class="col-6">
+							<label>Order No.</label>
+							<input [(ngModel)]="orderData.order_no" [disabled]="orderData.order_no" class="form-control"
+								   fullWidth
+								   name="order_no" nbInput
+								   placeholder="Order No." required
+								   type="text">
+							<a (click)="autoGenerateOrderNo()" *ngIf="!orderData.order_no"
+							   href="javascript:void">auto generate</a>
+						</div>
+
+						<div class="col-6">
+							<label>Merchant Reference Number</label>
+							<input [(ngModel)]="orderData.order_no1" class="form-control" fullWidth name="field1"
+								   nbInput
+								   placeholder="Merchant Reference Number"
+								   type="text">
+						</div>
+					</div>
+
+
+					<div class="form-group">
+						<!--<div class="col-9">-->
+						<label>Search Existing Customer</label>
+						<div class="row">
+							<div class="col-8">
+								<ngx-type-ahead (failed)="setCustomer(undefined)" (send)="setCustomer($event)"
+												[displayNames]="['name', 'phone']" [model]="orderData.customer"
+												[notifySearchFail]="true"
+												[url]="'customer'"
+								></ngx-type-ahead>
+							</div>
+
+							<div class="col-4">
+								<button (click)="setCustomer(undefined)" nbButton shape="rectangle" size="small"
+										status="danger">add new
+									customer
+								</button>
+							</div>
+						</div>
+
+						<!--</div>-->
+						<!--<div class="col-3 d-flex align-items-end">-->
+						<!--<button nbButton size="small" (click)="orderData.customer_id = undefined" status="info" outline-->
+						<!--shape="rectangle">Add new customer</button>-->
+						<!--</div>-->
+
+					</div>
+
+					<div class="form-group row">
+						<div class="col-6">
+							<label>Customer Name</label>
+							<input [(ngModel)]="customer.name" [disabled]="orderData.customer_id !== undefined"
+								   [ngClass]="orderData.customer_id !== undefined ? 'disabled' : ' '"
+								   class="form-control"
+								   fullWidth name="customer_name" nbInput
+								   placeholder="Customer Name"
+								   size="small" type="text">
+						</div>
+
+						<div class="col-6">
+							<label>Customer Number</label>
+							<input [(ngModel)]="customer.phone" [disabled]="orderData.customer_id !== undefined"
+								   [ngClass]="orderData.customer_id !== undefined ? 'disabled' : ' '"
+								   class="form-control"
+								   fullWidth name="customer_phone" nbInput
+								   placeholder="Customer Phone"
+								   size="small" type="text">
+						</div>
+
+					</div>
+
+					<div *ngIf="orderData.customer_id" class="form-group">
+						<div class="row">
+							<div class="col-8">
+								<nb-select (change)="clearAddress()" [(ngModel)]="orderData.delivery_address_id"
+										   [disabled]="!addresses.length" [selected]="orderData.delivery_address_id"
+										   fullWidth name="address" placeholder="Select existing address"
+										   shape="rectangle" size="small" status="primary">
+									<nb-option *ngFor="let add of addresses" [value]="add.id">
+										{{add.address}}
+									</nb-option>
+								</nb-select>
+							</div>
+							<div class="col-4">
+								<button (click)="orderData.delivery_address_id=null" nbButton shape="rectangle"
+										size="small"
+										status="danger">add new address
+								</button>
+							</div>
+						</div>
+
+					</div>
+
+
+					<div class="form-group row">
+						<div class="col-6">
+							<label>Address</label>
+							<input [(ngModel)]="address.address"
+								   [disabled]="orderData.delivery_address_id"
+								   class="form-control"
+								   fullWidth name="address_address"
+								   nbInput
+								   placeholder="Address" type="text">
+						</div>
+
+						<div class="col-6">
+							<label>Google Address</label>
+							<input #search [disabled]="orderData.delivery_address_id"
+								   [ngClass]="orderData.delivery_address_id ? 'disabled' : ' '" class="form-control"
+								   fullWidth
+								   nbInput
+								   placeholder="Google address" required type="text">
+						</div>
+
+					</div>
+					<div class="form-group row">
+						<div class="col-12">
+							<label>Pincode</label>
+							<input #pincode1=ngModel [(ngModel)]="orderData.pincode"
+								   [disabled]="orderData.delivery_address_id || !address.google_address"
+								   [pattern]=pincode
+								   class="form-control" fullWidth name="pincode" nbInput placeholder="Pincode"
+								   type="number">
+
+							<div *ngIf="pincode1.invalid && (pincode1.dirty || pincode1.touched)"
+								 class="alert alert-danger mt-3">
+
+								<div *ngIf="pincode1.errors.required">
+									pincode is required.
+								</div>
+								<div *ngIf="pincode1.errors.pattern">
+									pincode must match google address pincode.
+								</div>
+
+							</div>
+
+						</div>
+
+					</div>
+
+					<div class="form-group row">
+						<div class="col-6">
+							<nb-checkbox [(ngModel)]="orderData.is_express" name="is_express">Express</nb-checkbox>
+						</div>
+						<div class="col-6">
+							<nb-checkbox [(ngModel)]="orderData.is_cold" name="cold_box">Cold Storage</nb-checkbox>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<div class="col-6">
+							<label>Payment Mode</label>
+							<nb-select [(ngModel)]="orderData.payment_type" fullWidth name="payment_type" outline
+									   placeholder="Select Payment"
+									   shape="rectangle" status="info">
+								<nb-option [value]="'PAID'">PAID</nb-option>
+								<nb-option [value]="'COD'">COD</nb-option>
+							</nb-select>
+						</div>
+						<div class="col-6">
+							<label>Amount</label>
+							<input [(ngModel)]="orderData.total" class="form-control" fullWidth min="0"
+								   name="amount" nbInput
+								   placeholder="Order Amount" type="number">
+						</div>
+
+					</div>
+
+					<ng-container>
+						<div class="form-group row">
+							<div class="col-6">
+								<label>Pickup Address</label>
+								<input [(ngModel)]="pick_up_address.address"
+									   [disabled]="orderData.pick_up_address_id"
+									   class="form-control"
+									   fullWidth name="pickup_address_address"
+									   nbInput
+									   placeholder="Pickup Address" type="text">
+							</div>
+
+							<div class="col-6">
+								<label>Pickup Google Address</label>
+								<input #pickupSearch [disabled]="orderData.pick_up_address_id"
+									   [ngClass]="orderData.pick_up_address_id ? 'disabled' : ' '" class="form-control"
+									   fullWidth
+									   nbInput
+									   placeholder="Google address" required type="text">
+							</div>
+						</div>
+						<div class="form-group row">
+
+							<!--              <div class="col-4">-->
+							<!--                <div class="form-group">-->
+							<!--                  <label>Select Outlet</label>-->
+
+							<!--                  <ngx-type-ahead (send)="setMerchantTypes($event)" [filters]="{__only: ['id', 'name', 'categories']}"-->
+							<!--                                  [model]="orderData.outlet" [url]="'outlet'"-->
+							<!--                  ></ngx-type-ahead>-->
+							<!--                </div>-->
+							<!--              </div>-->
+
+							<div class="col-6">
+								<div class="form-group">
+									<label>Select Rider</label>
+									<ngx-type-ahead (send)="setTypes($event)" [displayNames]="['name', 'phone']"
+													[filters]="{__is_rider__bool: true,
+                  __include: 'categories,user_device,duty', __active__bool: true, __on_duty__equal: 1,
+                  __only: 'id,name,categories,phone,user_device,duty' }" [model]="orderData.user"
+													[url]="'user'"
+									></ngx-type-ahead>
+
+								</div>
+							</div>
+							<ng-container *ngIf="orderData.category && orderData.category_id; else noCat">
+								<div
+									class="flex-column justify-content-center align-items-center align-self-center mt-2">
+									<div>
+										<span>{{orderData?.category?.name}}</span>
+									</div>
+								</div>
+								<nb-icon (click)="orderData.category_id = null"
+										 [options]="{ height: 24, width: 24, fill: 'red' }"
+										 icon="close"></nb-icon>
+							</ng-container>
+
+							<ng-template #noCat>
+
+								<ng-container *ngIf="orderData.user_id;else noUser">
+									<div class="col-6">
+										<div class="form-group">
+											<label>Select Category</label>
+											<nb-select [(ngModel)]="orderData.category_id"
+													   [selected]="orderData.category_id"
+													   fullWidth name="type"
+													   placeholder="Select Category" shape="rectangle" status="primary"
+											>
+												<nb-option
+													*ngFor="let category of riderTypes"
+													[value]="category.id">Category - {{category.name}}</nb-option>
+											</nb-select>
+										</div>
+									</div>
+								</ng-container>
+
+								<ng-template #noUser>
+									<div class="col-6">
+										<div class="form-group">
+											<label>Select Category</label>
+											<nb-select [(ngModel)]="orderData.category_id"
+													   [selected]="orderData.category_id"
+													   fullWidth name="type" required="" shape="rectangle"
+													   status="primary"
+											>
+												<nb-option
+													*ngFor="let type of types"
+													[value]="type?.category_rate_list?.category?.id">Category
+													- {{type?.category_rate_list?.category?.name}}</nb-option>
+											</nb-select>
+										</div>
+									</div>
+								</ng-template>
+							</ng-template>
+
+						</div>
+					</ng-container>
+
+					<div class="form-group mt-3 d-flex justify-content-end">
+
+						<button (click)="cancel()" class="mr-5" nbButton shape="rectangle" size="medium"
+								status="danger">
+							CANCEL
+						</button>
+
+						<button (click)="request()"
+								[disabled]="orderForm.form.invalid"
+								nbButton shape="rectangle" size="medium" type="submit">
+                <span *ngIf="orderData.id;">
+                  UPDATE
+                </span>
+							<span *ngIf="!orderData.id;">
+                  REQUEST
+                </span>
+						</button>
+
+					</div>
+
+				</form>
+
+				<div class="m-auto">
+					<ng-container *ngIf='orderData.markers != ""; else elseBlock'>
+						<ng-container *ngFor="let marker of orderData?.markers">
+							<img [src]="'https://roadcast.sgp1.digitaloceanspaces.com/upload/' + marker.imagePath"
+								 height="auto" width="500px">
+						</ng-container>
+					</ng-container>
+					<ng-template #elseBlock>
+						<h1>No image</h1>
+					</ng-template>
+				</div>
+			</div>
+		</div>
+
+
+		<div [hidden]="step !== 2 && orderData.is_duty">
+			<div *ngIf="!orderData.id" class="d-flex justify-content-start mb-3">
+				<nb-icon (click)="goBack()" icon="arrow-back-outline"></nb-icon>
+			</div>
+			<form #scheduleForm=ngForm class="form form-horizontal d-flex flex-column justify-content-around">
+
+				<div class="d-flex justify-content-around">
+
+					<div>
+						<h3 class="mb-3">Duty Start</h3>
+						<owl-date-time-inline [(ngModel)]="start"
+											  [startAt]="startDate"
+											  name="start"></owl-date-time-inline>
+					</div>
+
+					<div>
+						<h3 class="mb-3">Duty End</h3>
+						<owl-date-time-inline [(ngModel)]="end"
+											  [startAt]="startDate"
+											  name="end"></owl-date-time-inline>
+					</div>
+
+				</div>
+
+				<div class="form-group">
+					<label>Extra Field</label>
+					<input [(ngModel)]="orderData.field1" class="form-control" fullWidth name="field1" nbInput
+						   placeholder="Extra Field"
+						   type="text">
+				</div>
+
+				<div class="form-group">
+					<!--<div class="col-9">-->
+					<label>Search Existing Customer</label>
+					<div class="row">
+						<div class="col-8">
+							<ngx-type-ahead (failed)="setCustomer(undefined)" (send)="setCustomer($event)"
+											[displayNames]="['name', 'phone']" [model]="orderData.customer"
+											[notifySearchFail]="true"
+											[url]="'customer'"
+							></ngx-type-ahead>
+						</div>
+
+						<div class="col-4">
+							<button (click)="setCustomer(undefined)" nbButton shape="rectangle" size="small"
+									status="danger">add new
+								customer
+							</button>
+						</div>
+					</div>
+
+					<!--</div>-->
+					<!--<div class="col-3 d-flex align-items-end">-->
+					<!--<button nbButton size="small" (click)="orderData.customer_id = undefined" status="info" outline-->
+					<!--shape="rectangle">Add new customer</button>-->
+					<!--</div>-->
+
+				</div>
+
+				<div class="form-group row">
+					<div class="col-6">
+						<label>Customer Name</label>
+						<input [(ngModel)]="customer.name" [disabled]="orderData.customer_id !== undefined"
+							   [ngClass]="orderData.customer_id !== undefined ? 'disabled' : ' '"
+							   class="form-control"
+							   fullWidth name="customer_name" nbInput
+							   placeholder="Customer Name"
+							   size="small" type="text">
+					</div>
+
+					<div class="col-6">
+						<label>Customer Number</label>
+						<input [(ngModel)]="customer.phone" [disabled]="orderData.customer_id !== undefined"
+							   [ngClass]="orderData.customer_id !== undefined ? 'disabled' : ' '"
+							   class="form-control"
+							   fullWidth name="customer_phone" nbInput
+							   placeholder="Customer Phone"
+							   size="small" type="text">
+					</div>
+
+				</div>
+
+				<div *ngIf="orderData.customer_id" class="form-group">
+					<div class="row">
+						<div class="col-8">
+							<nb-select (change)="clearAddress()" [(ngModel)]="orderData.pick_up_address_id"
+									   [disabled]="!addresses.length" [selected]="orderData.pick_up_address_id"
+									   fullWidth name="address" placeholder="Select existing address"
+									   shape="rectangle" size="small" status="primary">
+								<nb-option *ngFor="let add of addresses" [value]="add.id">
+									{{add.address}}
+								</nb-option>
+							</nb-select>
+						</div>
+						<div class="col-4">
+							<button (click)="orderData.pick_up_address_id=null" nbButton shape="rectangle" size="small"
+									status="danger">add new address
+							</button>
+						</div>
+					</div>
+
+				</div>
+
+
+				<div class="form-group row">
+					<div class="col-6">
+						<label>Address</label>
+						<input [(ngModel)]="address.address"
+							   [disabled]="orderData.pick_up_address_id"
+							   class="form-control"
+							   fullWidth name="address_address"
+							   nbInput
+							   placeholder="Address" type="text">
+					</div>
+
+					<div class="col-6">
+						<label>Google Address</label>
+						<input #search1 [disabled]="orderData.pick_up_address_id"
+							   [ngClass]="orderData.pick_up_address_id ? 'disabled' : ' '" class="form-control"
+							   fullWidth
+							   nbInput
+							   placeholder="Google address" required type="text">
+					</div>
+
+				</div>
+				<div class="form-group row">
+					<div class="col-12">
+						<label>Pincode</label>
+						<input #pincode1=ngModel [(ngModel)]="orderData.pincode"
+							   [disabled]="orderData.pick_up_address_id || !address.google_address" [pattern]=pincode
+							   class="form-control" fullWidth name="pincode" nbInput placeholder="Pincode"
+							   type="number">
+
+						<div *ngIf="pincode1.invalid && (pincode1.dirty || pincode1.touched)"
+							 class="alert alert-danger mt-3">
+
+							<div *ngIf="pincode1.errors.required">
+								pincode is required.
+							</div>
+							<div *ngIf="pincode1.errors.pattern">
+								pincode must match google address pincode.
+							</div>
+
+						</div>
+
+					</div>
+
+				</div>
+
+				<ng-container *ngIf="showMerchantForm  && !orderData.id">
+					<div class="row">
+						<!--            <div class="col-4">-->
+						<!--              <div class="form-group">-->
+						<!--                <label>Select Merchant</label>-->
+
+						<!--                <ngx-type-ahead (send)="setMerchantTypes($event)"-->
+						<!--                                [filters]="{__is_merchant__bool: true}"-->
+						<!--                                [model]="orderData.merchant" [url]="'user'"-->
+						<!--                ></ngx-type-ahead>-->
+						<!--              </div>-->
+						<!--            </div>-->
+						<div class="col-6">
+							<div class="form-group">
+								<label>Select Rider</label>
+								<ngx-type-ahead (send)="setTypes($event)" [displayNames]="['name', 'phone']"
+												[filters]="{__is_rider__bool: true,
+                  __include: 'categories,user_device,duty', __active__bool: true, __on_duty__equal: 1,
+                  __only: 'id,name,categories,phone,user_device,duty' }" [model]="orderData.user"
+												[url]="'user'"
+								></ngx-type-ahead>
+
+							</div>
+						</div>
+						<ng-container *ngIf="orderData.category && orderData.category_id; else noCat">
+							<div class="flex-column justify-content-center align-items-center align-self-center mt-2">
+								<div>
+									<span>{{orderData?.category?.name}}</span>
+								</div>
+							</div>
+							<nb-icon (click)="orderData.category_id = null"
+									 [options]="{ height: 24, width: 24, fill: 'red' }"
+									 icon="close"></nb-icon>
+						</ng-container>
+
+						<ng-template #noCat>
+
+							<ng-container *ngIf="orderData.user_id;else noUser">
+								<div class="col-6">
+									<div class="form-group">
+										<label>Select Category</label>
+										<nb-select [(ngModel)]="orderData.category_id"
+												   [selected]="orderData.category_id"
+												   fullWidth name="type"
+												   placeholder="Select Category" shape="rectangle" status="primary"
+										>
+											<nb-option
+												*ngFor="let category of riderTypes"
+												[value]="category.id">Category - {{category.name}}</nb-option>
+										</nb-select>
+									</div>
+								</div>
+							</ng-container>
+
+							<ng-template #noUser>
+								<div class="col-6">
+									<div class="form-group">
+										<label>Select Category</label>
+										<nb-select [(ngModel)]="orderData.category_id"
+												   [selected]="orderData.category_id"
+												   fullWidth name="type" required="" shape="rectangle"
+												   status="primary"
+										>
+											<nb-option
+												*ngFor="let type of types"
+												[value]="type?.category_rate_list?.category?.id">Category
+												- {{type?.category_rate_list?.category?.name}}</nb-option>
+										</nb-select>
+									</div>
+								</div>
+							</ng-template>
+						</ng-template>
+					</div>
+				</ng-container>
+
+				<div class="form-group d-flex justify-content-end">
+
+					<button (click)="cancel()" class="mr-5" nbButton shape="rectangle" size="medium" status="danger">
+						CANCEL
+					</button>
+
+					<button (click)="schedule()" [disabled]="scheduleForm.form.invalid || !end || !start"
+							nbButton shape="rectangle" size="medium" type="submit">
+                <span *ngIf="orderData.id;">
+                  UPDATE
+                </span>
+						<span *ngIf="!orderData.id;">
+                  SCHEDULE
+                </span>
+					</button>
+				</div>
+			</form>
+		</div>
+
+	</nb-card-body>
+</nb-card>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,92 @@
+<div class="row p-4">
+	<div class="col-sm-8">
+		<nb-card>
+			<nb-card-header>1. Basic Details</nb-card-header>
+			<nb-card-body class="p-4">
+				<form #brandForm=ngForm class="form form-horizontal">
+					<div class="form-group">
+						<label>Name</label>
+						<input #name=ngModel [(ngModel)]="brand.name" fullWidth minlength="4" name="name" nbInput
+							   required="true"
+							   shape="rectangle" status="primary" type="text">
+
+						<div *ngIf="name.invalid && (name.dirty || name.touched)"
+							 class="alert alert-danger mt-3">
+
+							<div *ngIf="name.errors.required">
+								Name is required.
+							</div>
+							<div *ngIf="name.errors.minlength">
+								Name must be at least 4 characters long.
+							</div>
+
+						</div>
+
+					</div>
+
+					<div class="form-group">
+						<label>Email</label>
+						<input #brandEmail=ngModel [(ngModel)]="brand.email" fullWidth name="email" nbInput
+							   pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required="true" shape="rectangle"
+							   status="primary"
+							   type="email">
+
+
+						<div *ngIf="brandEmail.invalid && (brandEmail.dirty || brandEmail.touched)"
+							 class="alert alert-danger mt-3">
+
+							<div *ngIf="brandEmail.errors.required">
+								email is required.
+							</div>
+							<div *ngIf="brandEmail.errors.pattern">
+								email must be of the form example@example.com.
+							</div>
+
+						</div>
+
+					</div>
+
+					<div class="form-group">
+						<label>Phone</label>
+						<input #brandPhone=ngModel [(ngModel)]="brand.phone" fullWidth name="phone" nbInput
+							   pattern="[56789][0-9]{6,13}" required="true" shape="rectangle"
+							   status="primary" type="tel">
+
+
+						<div *ngIf="brandPhone.invalid && (brandPhone.dirty || brandPhone.touched)"
+							 class="alert alert-danger mt-3">
+
+							<div *ngIf="brandPhone.errors.required">
+								phone is required.
+							</div>
+
+							<div *ngIf="brandPhone.errors.pattern">
+								Phone number is must be between 6 - 10 and start from 9, 8 or 7
+							</div>
+
+						</div>
+					</div>
+
+
+				</form>
+			</nb-card-body>
+
+			<nb-card-footer>
+				<div class="d-flex justify-content-end">
+					<button (click)="cancel()" class="mr-5" nbButton status="danger">CANCEL</button>
+					<button (click)="save()" [disabled]="brandForm.form.invalid" nbButton status="primary">SAVE</button>
+				</div>
+			</nb-card-footer>
+		</nb-card>
+
+
+
+	</div>
+
+	<div class="col-sm-4">
+
+
+
+	</div>
+
+</div>

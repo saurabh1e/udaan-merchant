@@ -1,0 +1,123 @@
+<div class="mt-5 mb-3 d-flex align-items-end justify-content-between">
+
+	<button (click)="edit()"
+			*ngIf="addNew" class="mr-5"
+			nbButton shape="rectangle" size="small" status="primary">Create New
+	</button>
+
+	<div class="d-flex align-items-center">
+
+		<input #inputVal [nbDatepicker]="formpicker" nbInput placeholder="Pick Date Range"
+		>
+		<nb-rangepicker #formpicker (rangeChange)="changeRange($event)"></nb-rangepicker>
+
+		<i (click)="changeRange(null)" class="eva-icon-container ml-1">
+			<nb-icon icon="close"></nb-icon>
+		</i>
+	</div>
+
+
+	<ng-container *ngFor="let filter of filters">
+		<nb-checkbox #checked (change)="applyFilter(filter, checked?.value)">
+      <span>
+      {{filter.name}}
+      </span>
+
+		</nb-checkbox>
+	</ng-container>
+
+	<div *ngIf="searchField">
+		<input (keyup.enter)="loadData()" [(ngModel)]="searchTerm"
+			   fieldSize="medium"
+			   nbInput placeholder="Search here" shape="rectangle" type="text">
+	</div>
+</div>
+
+<div class="table-wrapper-scroll-y my-custom-scrollbar">
+
+	<table class="table table-borderless bg-white data-table">
+		<thead class="">
+		<tr class="font-weight-bold">
+			<th *ngFor="let column of columns">{{ column?.displayName }}</th>
+			<th *ngIf="editIcon">Edit</th>
+			<th *ngIf="infoIcon">View</th>
+			<th *ngIf="disableIcon">Disable</th>
+		</tr>
+		</thead>
+		<tbody class="fixed-height">
+		<ng-container *ngFor="let row of data">
+			<tr>
+				<ng-container *ngFor="let column of columns">
+					<td [innerHTML]="column.displayFn ? column.displayFn(row, column) : row[column.name]"></td>
+				</ng-container>
+
+				<td *ngIf="editIcon">
+					<div (click)="edit(row.id)" class="icon">
+						<i class="eva-icon-container">
+							<nb-icon
+								[icon]="'edit-outline'"></nb-icon>
+						</i>
+					</div>
+				</td>
+				<td *ngIf="infoIcon">
+					<div (click)="view.emit(row)" class="icon">
+						<i class="eva-icon-container">
+							<nb-icon
+								[icon]="'info-outline'"></nb-icon>
+						</i>
+					</div>
+				</td>
+				<td *ngIf="disableIcon">
+					<div (click)="disable(row, disableColumn)" class="icon cursor-pointer">
+						<i class="eva-icon-container">
+							<ng-container *ngIf="row[disableColumn]; else disabled">
+								<nb-icon [icon]="'toggle-right-outline'"
+										 [options]="{ animationType: 'pulse', fill: 'green', width: 24, height: 24 }"></nb-icon>
+
+							</ng-container>
+							<ng-template #disabled>
+								<nb-icon [icon]="'toggle-left-outline'"
+										 [options]="{ animationType: 'pulse', fill: 'red', width: 24, height: 24 }"></nb-icon>
+							</ng-template>
+
+						</i>
+					</div>
+				</td>
+			</tr>
+		</ng-container>
+
+		</tbody>
+	</table>
+
+	<table *ngIf="footer" class="table table-footer">
+		<thead class="thead-light">
+		<tr>
+			<th class="p-2">
+				<button (click)="saveAs()" [shape]="'rectangle'" [status]="'info'" nbButton shape="rectangle"
+						size="small">DOWNLOAD
+				</button>
+			</th>
+			<th class="p-2 d-flex justify-content-between align-items-end">
+				<div [ngClass]="page === 1? 'disabled':''" class="icon">
+					<i (click)="previousPage()" class="eva-icon-container previous-page">
+						<nb-icon icon="arrow-left-outline"></nb-icon>
+					</i>
+				</div>
+				<div>
+					PAGE
+					<input [(ngModel)]="currPage" [max]="totalPages" [value]="currPage" class="ml-3 mr-1" min="1"
+						   nbInput type="number">
+					(max: {{totalPages}})
+					<button (click)="setPage()" [shape]="'rectangle'" class="ml-3" nbButton size="small">GO</button>
+				</div>
+				<div [ngClass]="page === totalPages? 'disabled':''" class="icon">
+					<i (click)="nextPage()" class="eva-icon-container next-page">
+						<nb-icon icon="arrow-right-outline"></nb-icon>
+					</i>
+				</div>
+			</th>
+		</tr>
+		</thead>
+	</table>
+</div>
+

@@ -1,0 +1,29 @@
+<nb-card style="min-width: 300px;max-height: 400px ">
+	<nb-card-header>
+		<div class="d-flex flex-row justify-content-between align-item-center">
+			<div class="h4 d-flex align-items-start">{{title}}</div>
+			<div (click)="cancel()" class="icon d-flex align-items-end">
+				<nb-icon [options]="{ fill: '#ff8196' }" icon="close-outline"></nb-icon>
+			</div>
+		</div>
+	</nb-card-header>
+
+	<nb-card-body>
+		<form #msgForm=ngForm class="mt-5">
+			<div class="form-group">
+				<label>Enter name of geofence</label>
+				<input class="form-control" fullWidth name="geofence"
+					   nbInput placeholder="Enter here" required
+					   size="small" type="text">
+			</div>
+			<div class="form-group mt-5 d-flex justify-content-end">
+				<button (click)="mssg()" [disabled]="msgForm.form.invalid"
+						class="mr-3" nbButton shape="rectangle" size="medium" type="submit">OK
+				</button>
+				<button (click)="cancel()"
+						nbButton shape="rectangle" size="medium" status="danger" type="submit">Cancel
+				</button>
+			</div>
+		</form>
+	</nb-card-body>
+</nb-card>

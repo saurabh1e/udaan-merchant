@@ -1,0 +1,33 @@
+<nb-card>
+	<nb-card-header>{{serial}}. <span *ngIf="isAdmin">Admin</span> <span *ngIf="vehicleId || !isAdmin">Rider</span>
+		Users
+	</nb-card-header>
+	<nb-card-body class="p-4">
+		<ngx-type-ahead (send)="addUser($event)"
+						[disabled]="!branchId && !vehicleId"
+						[filters]="filters"
+						[model]="{}" [placeholder]="'Search users here'"
+						[required]="true" [url]="'user'">
+
+		</ngx-type-ahead>
+
+		<div class="mt-5">
+			<nb-list style="max-height: 400px; overflow-y: auto">
+				<nb-list-item *ngFor="let user of users; let i = index">
+					<div class="d-flex justify-content-between align-items-center">
+						<nb-user (click)="editUser(user.id)" [name]="user.name" [title]="user.phone" class="cursor">
+
+						</nb-user>
+						<nb-icon (click)="removeUser(user.id, i)" class="cursor" icon="close" status="danger"></nb-icon>
+					</div>
+
+				</nb-list-item>
+			</nb-list>
+		</div>
+
+	</nb-card-body>
+
+	<nb-card-footer class="d-flex justify-content-end">
+		<button (click)="editUser()" nbButton shape="rectangle" status="primary">Add New</button>
+	</nb-card-footer>
+</nb-card>

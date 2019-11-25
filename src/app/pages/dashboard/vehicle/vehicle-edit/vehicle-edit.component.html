@@ -1,0 +1,1380 @@
+<div class="row p-4">
+	<div class="col-sm-8">
+
+		<nb-card>
+			<nb-card-header>1. Vehicle Details</nb-card-header>
+			<nb-card-body class="p-4">
+				<form #vehicleForm=ngForm class="form form-horizontal">
+					<div class="form-group">
+						<nb-radio-group [(ngModel)]="vehicle.registration_type"
+										class="d-flex justify-content-around" name="registration_type">
+							<nb-radio (click)="showRequiredFieldPopUp('ADHOC')" [value]="'ADHOC'">Adhoc</nb-radio>
+							<nb-radio (click)="showRequiredFieldPopUp('EXPRESS')" [value]="'EXPRESS'">Express</nb-radio>
+							<nb-radio (click)="showRequiredFieldPopUp('VENDOR')" [value]="'VENDOR'">Vendor</nb-radio>
+						</nb-radio-group>
+					</div>
+					<div class="form-group">
+						<label>Registration Number (*)</label>
+						<input #regNumber=ngModel [(ngModel)]="vehicle.registration_number"
+							   [required]="checkRequired('registration_number')"
+							   fullWidth name="regNumber" nbInput
+							   pattern="[A-Z]{2}_[A-Z0-9]{2}_[A-Z0-9]{1,3}_[0-9]{4}" shape="rectangle" status="primary"
+							   type="text">
+
+						<div *ngIf="regNumber.invalid && (regNumber.dirty || regNumber.touched)"
+							 class="alert alert-danger mt-3">
+							<div *ngIf="regNumber.errors.required">
+								Registration Number is required.
+							</div>
+							<div *ngIf="regNumber.errors.pattern">
+								Registration Number must be of the form DL_01_AC_0001.
+							</div>
+						</div>
+
+					</div>
+
+					<div class="form-group">
+						<label>RC Validity From (*)</label>
+						<input #registration_from=ngModel [(ngModel)]="vehicle.registration_from"
+							   [required]="checkRequired('registration_from')" [value]="registration_from" class="mr-3"
+							   fullWidth
+							   name="registration_from"
+							   nbInput placeholder="Pick Date"
+							   shape="rectangle" status="primary" type="date">
+						<div *ngIf="registration_from.invalid && (registration_from.dirty || registration_from.touched)"
+							 class="alert alert-danger mt-3">
+							<div *ngIf="registration_from.errors.required">
+								Registration Number is required.
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label>RC Validity To (*)</label>
+						<input #registration_to=ngModel [(ngModel)]="vehicle.registration_to"
+							   [required]="checkRequired('registration_to')" [value]="registration_to" class="mr-3"
+							   fullWidth
+							   name="registration_to"
+							   nbInput placeholder="Pick Date"
+							   shape="rectangle" status="primary" type="date">
+						<div *ngIf="registration_to.invalid && (registration_to.dirty || registration_to.touched)"
+							 class="alert alert-danger mt-3">
+							<div *ngIf="registration_to.errors.required">
+								Registration Number is required.
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label>RC upload (*)</label>
+						<ngx-file-upload (getUrl)="vehicle.registration_upload = $event"
+										 [required]="checkRequired('registration_upload')"
+										 [url]="vehicle.registration_upload"></ngx-file-upload>
+					</div>
+
+					<div class="form-group">
+						<label>Insurance Validity From</label>
+						<input #insurance_from=ngModel [(ngModel)]="vehicle.insurance_from"
+							   [value]="insurance_from" class="mr-3" fullWidth name="insurance_from"
+							   nbInput placeholder="Pick Date"
+							   shape="rectangle" status="primary" type="date">
+					</div>
+
+					<div class="form-group">
+						<label>Insurance Validity To</label>
+						<input #insurance_to=ngModel [(ngModel)]="vehicle.insurance_to"
+							   [value]="insurance_to" class="mr-3" fullWidth name="insurance_to"
+							   nbInput placeholder="Pick Date"
+							   shape="rectangle" status="primary" type="date">
+					</div>
+
+					<div class="form-group">
+						<label>Insurance upload</label>
+						<ngx-file-upload (getUrl)="vehicle.insurance_upload = $event"
+										 [url]="vehicle.insurance_upload"></ngx-file-upload>
+					</div>
+
+					<div class="form-group">
+						<label>Pollution Certificate</label>
+						<ngx-file-upload (getUrl)="vehicle.pollution_upload = $event"
+										 [url]="vehicle.pollution_upload"></ngx-file-upload>
+					</div>
+
+					<div class="form-group">
+						<label>Pollution Certificate expiry</label>
+						<input #pollution_expiry=ngModel [(ngModel)]="vehicle.pollution_expiry"
+							   [value]="pollution_expiry" class="mr-3" fullWidth name="pollution_expiry"
+							   nbInput placeholder="Pick Date"
+							   shape="rectangle" status="primary" type="date">
+					</div>
+
+					<div class="form-group">
+						<label>Vehicle Fitness Certificate</label>
+						<ngx-file-upload (getUrl)="vehicle.fitness_upload = $event"
+										 [url]="vehicle.fitness_upload"></ngx-file-upload>
+					</div>
+
+					<div class="form-group">
+						<label>Vehicle Fitness Certificate Expiry</label>
+						<input #fitness_expiry=ngModel [(ngModel)]="vehicle.fitness_expiry"
+							   [value]="fitness_expiry" class="mr-3" fullWidth name="fitness_expiry"
+							   nbInput placeholder="Pick Date"
+							   shape="rectangle" status="primary" type="date">
+					</div>
+
+					<div class="form-group">
+						<label>Manufacturer</label>
+						<input #manufacturer=ngModel [(ngModel)]="vehicle.manufacturer" fullWidth minlength="4"
+							   name="manufacturer"
+							   nbInput shape="rectangle" status="primary" type="text">
+					</div>
+
+					<div class="form-group">
+						<label>Model</label>
+						<input #model=ngModel [(ngModel)]="vehicle.model" fullWidth minlength="4" name="model" nbInput
+							   shape="rectangle" status="primary" type="text">
+					</div>
+
+					<div class="form-group">
+						<label>Manufacturing Year</label>
+						<input #manufacturing_year=ngModel [(ngModel)]="vehicle.manufacturing_year" [minlength]="4"
+							   fullWidth
+							   maxlength="4" minlength="4" name="manufacturing_year"
+							   nbInput shape="rectangle" status="primary" type="number">
+					</div>
+
+					<div class="form-group">
+						<label>Type</label>
+						<input #type=ngModel [(ngModel)]="vehicle.type"
+							   fullWidth name="type" nbInput
+							   shape="rectangle" status="primary" type="text">
+					</div>
+
+					<div class="form-group">
+						<label>Storage</label>
+						<nb-select #storage=ngModel [(ngModel)]="vehicle.storage" fullWidth name="storage"
+								   placeholder="Select storage type" size="small">
+							<nb-option value="Less than 1000 kg">Less than 1000 kg</nb-option>
+							<nb-option value="1000 kg">1000 kg</nb-option>
+							<nb-option value="2000 kg">2000 kg</nb-option>
+							<nb-option value="Greater than 2000 kg">Greater than 2000 kg</nb-option>
+						</nb-select>
+						<!--            <input #storage=ngModel [(ngModel)]="vehicle.storage"-->
+						<!--                   fullWidth name="storage" nbInput-->
+						<!--                   shape="rectangle" status="primary" storage="text">-->
+					</div>
+
+					<div class="form-group">
+						<label>Vendor</label>
+						<ngx-type-ahead (send)="vehicle.vendor = $event;vehicle.vendor_id = $event.id"
+										[filters]="{__only: ['id', 'name'], __is_merchant__bool: true}"
+										[model]="vehicle.vendor " [required]="true" [url]="'outlet'">
+						</ngx-type-ahead>
+
+
+					</div>
+				</form>
+			</nb-card-body>
+
+			<nb-card-footer>
+				<div class="d-flex justify-content-end">
+					<button (click)="cancel()" class="mr-5" nbButton status="danger">CANCEL</button>
+					<button (click)="save()" [disabled]="vehicleForm.form.invalid" nbButton status="primary">SAVE
+					</button>
+				</div>
+			</nb-card-footer>
+		</nb-card>
+
+		<nb-card>
+			<nb-card-header>4. Vehicle On Boarding</nb-card-header>
+			<nb-card-body class="p-4">
+				<form #riderOnBoard=ngForm class="form form-horizontal">
+					<div class="form-group">
+						<nb-checkbox #is_owner=ngModel [(ngModel)]="onBoardingDetail.is_owner" name="is_owner">Is
+							Owner
+						</nb-checkbox>
+						<nb-checkbox #is_loader=ngModel [(ngModel)]="onBoardingDetail.is_loader" name="is_loader">Is
+							Loader Present
+						</nb-checkbox>
+					</div>
+
+					<div class="form-group">
+						<label>Owner Name</label>
+						<input #owner_name=ngModel [(ngModel)]="onBoardingDetail.owner_name"
+							   [disabled]="!vehicle.id || onBoardingDetail.is_completed"
+							   [required]="checkRequired('')" fullWidth minlength="4"
+							   name="owner_name" nbInput
+							   shape="rectangle" status="primary" type="text">
+						<div *ngIf="owner_name.invalid && (owner_name.dirty || owner_name.touched)"
+							 class="alert alert-danger mt-3">
+							<div *ngIf="owner_name.errors.required">
+								Name is required.
+							</div>
+							<div *ngIf="owner_name.errors.minlength">
+								Name must be at least 4 characters long.
+							</div>
+						</div>
+
+					</div>
+
+					<div class="form-group">
+						<label>Owner Phone</label>
+						<input #owner_phone=ngModel [(ngModel)]="onBoardingDetail.owner_phone"
+							   [disabled]="!vehicle.id || onBoardingDetail.is_completed"
+							   [required]="checkRequired('owner_phone')" fullWidth name="owner_phone"
+							   nbInput pattern="[56789][0-9]{6,13}" shape="rectangle"
+							   status="primary" type="tel">
+
+						<div *ngIf="owner_phone.invalid && (owner_phone.dirty || owner_phone.touched)"
+							 class="alert alert-danger mt-3">
+							<div *ngIf="owner_phone.errors.required">
+								phone is required.
+							</div>
+							<div *ngIf="owner_phone.errors.pattern">
+								phone must be of 7 to 10 numbers.
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label>Owner Father Name</label>
+						<input #owner_father_name=ngModel [(ngModel)]="onBoardingDetail.owner_father_name"
+							   [disabled]="!vehicle.id || onBoardingDetail.is_completed"
+							   fullWidth name="owner_father_name"
+							   nbInput
+							   shape="rectangle" status="primary" type="text">
+
+					</div>
+
+					<div class="form-group">
+						<label>Owner Address</label>
+						<input #owner_address=ngModel [(ngModel)]="onBoardingDetail.owner_address"
+							   [disabled]="!vehicle.id || onBoardingDetail.is_completed"
+							   fullWidth name="owner_address" nbInput
+							   shape="rectangle" status="primary" type="text">
+
+					</div>
+
+					<div class="form-group">
+						<label>Owner Age</label>
+						<input #owner_age=ngModel [(ngModel)]="onBoardingDetail.owner_age"
+							   [disabled]="!vehicle.id || onBoardingDetail.is_completed"
+							   fullWidth name="owner_age" nbInput
+							   shape="rectangle" status="primary" type="text">
+
+
+					</div>
+
+					<div class="form-group">
+						<label>Pan No</label>
+						<input #pan_number=ngModel [(ngModel)]="onBoardingDetail.pan_number"
+							   [disabled]="!vehicle.id || onBoardingDetail.is_completed"
+							   fullWidth minlength="10" name="pan_number"
+							   nbInput shape="rectangle" status="primary" type="text">
+						<div *ngIf="pan_number.invalid && (pan_number.dirty || pan_number.touched)"
+							 class="alert alert-danger mt-3">
+							<div *ngIf="pan_number.errors.minlength">
+								PAN must be of 10 characters.
+							</div>
+						</div>
+					</div>
+
+
+				</form>
+			</nb-card-body>
+
+			<nb-card-footer>
+				<ng-container *ngIf="meUser.company_id == '4'">
+					<div class="d-flex justify-content-start">
+						<button (click)="generateTds()" class="mr-5" nbButton status="danger">Generate tds</button>
+						<button (click)="generateAgreement()" nbButton status="primary">Generate Agreement</button>
+					</div>
+				</ng-container>
+
+				<div class="d-flex justify-content-end">
+					<button (click)="cancel()" class="mr-5" nbButton status="danger">CANCEL</button>
+					<button (click)="saveOnBoarding()"
+							[disabled]="riderOnBoard.form.invalid || onBoardingDetail.is_completed" nbButton
+							status="primary">SAVE
+					</button>
+				</div>
+			</nb-card-footer>
+		</nb-card>
+
+		<nb-card>
+			<nb-card-header>5. Complete Onboarding</nb-card-header>
+			<nb-card-body class="p-4">
+				<form #finalOnBoarding=ngForm class="form form-horizontal">
+
+					<div class="form-group">
+						<label>Bank Account Holders Name</label>
+						<input #accountName=ngModel [(ngModel)]="onBoardingDetail.account_holder_name"
+							   [disabled]="!vehicle.id || onBoardingDetail.is_completed"
+							   fullWidth minlength="4"
+							   name="account_holder_name" nbInput
+							   shape="rectangle" status="primary" type="text">
+						<div *ngIf="accountName.invalid && (accountName.dirty || accountName.touched)"
+							 class="alert alert-danger mt-3">
+							<div *ngIf="accountName.errors.required">
+								Account Name is required.
+							</div>
+							<div *ngIf="accountName.errors.minlength">
+								Account Name is must be of 4 characters.
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label>Bank Account Number</label>
+						<input #accountNumber=ngModel [(ngModel)]="onBoardingDetail.account_number"
+							   [disabled]="!vehicle.id || onBoardingDetail.is_completed"
+							   fullWidth minlength="4"
+							   name="account_number" nbInput
+							   shape="rectangle" status="primary" type="text">
+						<div *ngIf="accountNumber.invalid && (accountNumber.dirty || accountNumber.touched)"
+							 class="alert alert-danger mt-3">
+							<div *ngIf="accountNumber.errors.required">
+								Account Number is required.
+							</div>
+							<div *ngIf="accountNumber.errors.minlength">
+								Account Number is must be of 4 characters.
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label>Bank Name</label>
+						<input #bankname=ngModel [(ngModel)]="onBoardingDetail.bank_name"
+							   [disabled]="!vehicle.id || onBoardingDetail.is_completed"
+							   fullWidth minlength="4" name="bank_name"
+							   nbInput
+							   shape="rectangle" status="primary" type="text">
+						<div *ngIf="bankname.invalid && (bankname.dirty || bankname.touched)"
+							 class="alert alert-danger mt-3">
+							<div *ngIf="bankname.errors.required">
+								Bank Name is required.
+							</div>
+							<div *ngIf="bankname.errors.minlength">
+								Bank Name is must be of 4 characters.
+							</div>
+						</div>
+
+					</div>
+
+					<div class="form-group">
+						<label>IFSC Code</label>
+						<input #ifscCode=ngModel [(ngModel)]="onBoardingDetail.ifsc_code"
+							   [disabled]="!vehicle.id || onBoardingDetail.is_completed"
+							   fullWidth minlength="11" name="ifsc_code"
+							   nbInput
+							   shape="rectangle" status="primary" type="text">
+						<div *ngIf="ifscCode.invalid && (ifscCode.dirty || ifscCode.touched)"
+							 class="alert alert-danger mt-3">
+							<div *ngIf="ifscCode.errors.required">
+								IFSC code is required.
+							</div>
+							<div *ngIf="ifscCode.errors.minlength">
+								IFSC code is must be of 11 characters.
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label>Recent Photo of Owner</label>
+						<ngx-file-upload (getUrl)="onBoardingDetail.owner_photo_upload = $event"
+										 [url]="onBoardingDetail.owner_photo_upload"></ngx-file-upload>
+					</div>
+
+					<div class="form-group">
+						<label>Signed Agreement Upload</label>
+						<ngx-file-upload (getUrl)="onBoardingDetail.agreement_upload = $event"
+										 [url]="onBoardingDetail.agreement_upload"></ngx-file-upload>
+					</div>
+
+					<div class="form-group">
+						<label>NOC</label>
+						<ngx-file-upload (getUrl)="onBoardingDetail.noc_upload = $event"
+										 [url]="onBoardingDetail.noc_upload"></ngx-file-upload>
+					</div>
+
+					<div class="form-group">
+						<label>PAN Card upload</label>
+						<ngx-file-upload (getUrl)="onBoardingDetail.pan_card_upload = $event"
+										 [url]="onBoardingDetail.pan_card_upload"></ngx-file-upload>
+					</div>
+
+					<div class="form-group">
+						<label>Bank Document upload</label>
+						<ngx-file-upload (getUrl)="onBoardingDetail.bank_document_upload = $event"
+										 [url]="onBoardingDetail.bank_document_upload"></ngx-file-upload>
+					</div>
+
+					<div class="form-group">
+						<label>TDS Declaration upload</label>
+						<ngx-file-upload (getUrl)="onBoardingDetail.tds_upload = $event"
+										 [url]="onBoardingDetail.tds_upload"></ngx-file-upload>
+					</div>
+				</form>
+			</nb-card-body>
+
+			<nb-card-footer>
+				<ng-container *ngIf="meUser.company_id == '4'">
+					<div class="d-flex justify-content-start">
+						<button (click)="completeBoarding()"
+								[disabled]="finalOnBoarding.form.invalid || !onBoardingDetail.is_completed"
+								nbButton status="primary">Complete
+						</button>
+					</div>
+				</ng-container>
+				<div class="d-flex justify-content-end">
+					<button (click)="cancel()" class="mr-5" nbButton status="danger">CANCEL</button>
+					<button (click)="saveOnBoarding()" [disabled]="finalOnBoarding.form.invalid
+           || onBoardingDetail.is_completed" nbButton status="primary">SAVE
+					</button>
+				</div>
+			</nb-card-footer>
+		</nb-card>
+
+	</div>
+	<div class="col-sm-4">
+
+		<ngx-user-list [serial]="'2'" [users]="vehicle.users" [vehicleId]="vehicle.id"></ngx-user-list>
+
+		<nb-card>
+			<nb-card-header>3. Clusters
+			</nb-card-header>
+			<nb-card-body class="p-4">
+				<ngx-type-ahead (send)="addCluster($event)"
+								[disabled]="!vehicle.id"
+								[filters]="[]"
+								[model]="{}" [placeholder]="'Search clusters here'"
+								[required]="true" [url]="'cluster'">
+
+				</ngx-type-ahead>
+
+				<div class="mt-5">
+					<nb-list>
+						<nb-list-item *ngFor="let cluster of vehicle.clusters; let i = index">
+							<div class="d-flex justify-content-between align-items-center">
+								<nb-user [name]="cluster.name">
+
+								</nb-user>
+								<nb-icon (click)="removeCluster(cluster.id, i)" class="cursor" icon="close"
+										 status="danger"></nb-icon>
+							</div>
+
+						</nb-list-item>
+					</nb-list>
+				</div>
+
+			</nb-card-body>
+
+			<nb-card-footer class="d-flex justify-content-end">
+				<button [disabled]="true" nbButton shape="rectangle" status="primary">Add New</button>
+			</nb-card-footer>
+		</nb-card>
+
+	</div>
+
+</div>
+
+<div #tdsDoc style="display: none">
+	<div>
+
+		<p align=center style='text-align:center'><b><u><span><b>{{onBoardingDetail.owner_name}}</b></span></u></b></p>
+
+		<p align=center style='text-align:center'><b><u><span><b>{{onBoardingDetail.owner_address}}</b></span></u></b>
+		</p>
+
+		<p align=center style='text-align:center'><b><u><span>______________________________________________________________________________</span></u></b>
+		</p>
+
+		<p align=center style='text-align:center'><b><u><span>Declaration U/S 194<span class=GramE>C(</span>6) of the Income Tax Act 1961</span></u></b>
+		</p>
+
+		<p><span></span></p>
+
+		<p style='text-align:justify'><a name="_gjdgxs"></a><span>I <b>{{onBoardingDetail.owner_name}}</b>
+      Owner of the Vehicle Number <b>{{vehicle?.registration_number}}</b>, address <b>{{onBoardingDetail.owner_address}}</b><span
+				class=GramE> ,do</span> hereby makes the following
+declaration as required by subsection (6) of section 194C of the Income tax Act
+1961 for receiving payments from the payer without deduction of tax at source:-</span></p>
+
+		<p style='text-align:justify'><span>1) That I/We am/are authorized to
+make this declaration in the capacity as Proprietor/Partner/Director.</span></p>
+
+		<p style='text-align:justify'><span>2) That the contract is engaged by
+the payer for plying, firing or leasing of goods carriage for its business.</span></p>
+
+		<p style='text-align:justify'><span>3) That the contractor does not own
+more than 10 goods carriage as on date.</span></p>
+
+		<p style='text-align:justify'><span>4) That if number of goods carriages
+owned by the contractor exceeds ten at any time during the previous year
+2018-19 (<span class=SpellE>ie</span>, 01.04.2018 to 31.03.2019) or after
+furnishing this declaration, the contractor shall forthwith, in writing
+intimate the payer of this fact.</span></p>
+
+		<p style='text-align:justify'><span>5) That the Income <span
+			class=GramE>tax</span> Permanent account number (PAN) of the contractor is
+    <b>{{onBoardingDetail.pan_number}}</b></span></p>
+
+		<p style='text-align:justify'><span><span
+			style='mso-spacerun:yes'>&nbsp; </span>A self-attested copy of the PAN is
+furnished to the payer along with this declaration.</span></p>
+
+		<p style='text-align:justify'><span></span></p>
+
+		<p style='text-align:justify'><span>I the declarant do hereby verify
+that the contracts of the above points are true to the best of my knowledge and
+belief and no part of it is false and nothing material has been concealed in
+it.</span></p>
+
+		<p style='text-align:justify'><span></span></p>
+
+		<p style='text-align:justify'><span>Place:<span style='mso-tab-count:
+6'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Signature</span>
+		</p>
+
+		<p style='text-align:justify'><span>Date:<span style='mso-tab-count:
+6'>{{currDate}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Declarant
+    Name <b style='mso-bidi-font-weight:normal'><u><b>{{onBoardingDetail.owner_name}}</b></u></b></span></p>
+
+		<p><span></span></p>
+
+		<p><span></span></p>
+	</div>
+
+</div>
+<div #driverAgreement style="display: none">
+	<table>
+		<thead>
+		<tr>
+			<td>
+				<div class="header-space">&nbsp;</div>
+			</td>
+		</tr>
+		</thead>
+		<tbody>
+		<tr>
+			<td>
+				<div class="content"><p align="justify"><strong>This Agreement</strong> made at Bangalore is entered
+					into on{{day}}day of{{month}}, 20{{year}}and effective from{{currDate}}(&ldquo;Effective Date&rdquo;)
+				</p>
+					<p align="center"> Between </p>
+					<p align="justify"><strong>Hiveloop Logistics Pvt Ltd</strong> , a company incorporated under the
+						Companies Act 2013 and having its registered office at 1090/O, Municipal No. 1590/1090/O,
+						17<sup>th</sup> Main, Sector -3, HSR Layout, Bangalore 560 102 (hereinafter referred to as (&ldquo;<strong>the
+							Company/</strong>&rdquo;) (&ldquo;<strong>HPCL</strong> &rdquo;), which expression shall,
+						unless it be repugnant to the meaning and/or context thereof, mean and include its successors,
+						affiliates and permitted assigns) of the <strong>One Part</strong>, </p>
+					<p align="center"> AND </p>
+					<p align="justify"><u><strong>{{onBoardingDetail.owner_name}}</strong></u> ,
+						s/o{{onBoardingDetail.owner_father_name}}, aged about{{onBoardingDetail.owner_age}}years having
+						residence at{{onBoardingDetail.owner_address}}hereinafter called (&ldquo; <strong>
+							Vendor</strong> &rdquo;) (which expression shall unless it be repugnant to the context or
+						meaning thereof mean and include its his heirs, executors and administrators) of the <strong>
+							Other Part, </strong></p>
+					<p align="justify"><strong>Recital:</strong></p>
+					<p align="justify"> The Company wishes to avail the services of the Vendor to carry its consignment
+						for its customers by road in dedicated transport vehicle with registration number
+						<strong>{{vehicle?.registration_number}}</strong> which the Vendor has agreed to provide on the
+						terms and conditions hereinafter appearing. </p>
+					<p align="justify"> 1. The Company is engaged in the business of providing warehousing and logistics
+						services and acts as a delivery channel and facilitates delivery of goods for the user(s) that
+						avail its services. </p>
+					<p align="justify"> 2. The Company understands that the Vendor renders services of transporting
+						goods within the state of Karnataka though its vehicles ("Services"), details of which are
+						mentioned below. </p><br>
+					<p align="justify"><strong>Vehicle Specification:</strong></p>
+					<p align="justify"><strong>Model:{{vehicle?.type}}</strong></p>
+					<p align="justify"><strong>Registration No:</strong>
+						<strong>{{vehicle?.registration_number}}</strong></p>
+					<p align="justify"><strong>Carrying Capacity:{{vehicle?.storage}}</strong></p><br>
+					<p align="justify"> The Company is desirous of engaging the Vendor&rsquo;s Services for the
+						following purposes: </p>
+					<p align="justify"> (a) Commercial transportation of goods anywhere in the state of Karnataka </p>
+					<p align="justify"> (b) Use of the Vehicle body for advertisement purpose; the Company may, at its
+						cost and expense, paint the Vehicles with necessary permissions either for the Company branding
+						or third-party branding. </p>
+					<p align="justify"> 3. The Company shall payout the drivers as per the details Mentioned in Annexure
+						A. The Annexure A can be changed over time and will be communicated to the Vendor as on when
+						done through the HLPL Hub Notice Board, On the Udaan Driver App, through SMS, through Email or
+						through a written intimation. </p>
+					<p align="justify"> 4. Accordingly, the Vendor acknowledges and agrees as follows: </p>
+					<p align="justify"> (a) The Vendor shall render Services for 26 days in a month of each English
+						calendar month. If the Vendor fails to provide the vehicle for at least 26 days a month, the
+						Company is entitled reduce the promised business to the Vendor by up to Rs. 2000 each time (per
+						failure) </p>
+					<p align="justify"> (b) The Vendor will have to ensure that the driver reports to one monthly
+						training given by the Company, the notice to which would be given one week prior to the
+						training. </p>
+					<p align="justify"> (c) The owner and driver of the vehicle agree to vehicle tracking and this data
+						may be shared by the Company with its clients or whosoever it may deem necessary. </p>
+					<p align="justify"> (d) The vendor will have to ensure that COD, Runsheet closure &amp; RTO handover
+						is done on the same day without fail. In case of not adhering to it, a penalty of 50% of the
+						daily payout will levied. </p>
+					<p align="justify"> (e) It is responsibility of the Vendor to ensure that the driver carries a
+						properly functioning phone or a smartphone (mobile phone should not be switched off) all the
+						time while working for the Company. The driver should also be available on call/phone while on
+						duty and should mark the delivery on the app, failure to which would be deemed as a breach to
+						this agreement. In case of not adhering to it, a penalty of Rs 500 will levied on the total trip
+						amount. </p>
+					<p align="justify"> (f) The company may carry background verification of the Vendor and the Vehicle
+						Driver at its cost. In this case, the vendor &amp; driver need to support the process. Failing
+						to do so and on a negative background report, the company reserves the right to terminate the
+						contract without any prior notice. </p>
+					<p align="justify"> (g) The Vendor has to ensure that the driver adhere to the specified route till
+						the destination is reached and has made the delivery. The driver cannot indulge or offer
+						services to any other party while engaged to the Company through this agreement. </p>
+					<p align="justify"> (h) The use of the Vehicle for the advertisement or branding purpose by the
+						Company or a third party will be free of cost, if any cost incurred by the Company due to damage
+						caused to the branding shall be borne by the Vendor during the term of this Agreement </p>
+					<p align="justify"> (a) The Vendor cannot engage our present or past customers, directly or
+						indirectly within 1 year of termination of our contract with the Vendor. </p>
+					<p align="justify"> (b) The Vendor agrees to adhere to payment structure as agreed. The driver
+						cannot charge or harass the customer for more than the fare decided by the Company. </p>
+					<p align="justify"> (c) The Vendor shall be responsible to provide a helper for loading or unloading
+						of the goods at the delivery point. The Vendor shall ensure that the driver of the vehicle may
+						be required to help in loading and unloading of the goods from time to time. </p>
+					<p align="justify"> (d) It is the responsibility of the Vendor to bear fuel cost, insurance charges,
+						maintenance, driver salary or any other charges as applicable required in keeping the vehicle in
+						an excellent and road worthy condition and. </p>
+					<p align="justify"> (e) The Vendor accepts to render the services for the Company for all the
+						assigned loads and routes, denial to which will entitle the Company to deduct up to Rs. 2,000
+						each time (per failure). </p>
+					<p align="justify"> (f) The Vendor or its driver does not have the right to refusal to our
+						clients. </p>
+					<p align="justify"> (g) The Vendor owner has to take prior approval and submit the necessary
+						documents (Commercial Driving License, two passport size photos and one more address ID proof)
+						of the driver, in case the driver is changed. </p>
+					<p align="justify"> 5. The Company must be informed of every delay (whatever its duration) and/or
+						any contingencies or incidents, such as break-down, accident, seizure or detention, etc. which
+						occurs prior to or during the carriage within 15 minutes of the incident. The Vendor shall be
+						responsible for safe and intact carriage and delivery of the consignments that shall come to its
+						possession while offering the Services under this Agreement. In the event of theft, robbery,
+						pilferage, loss, damage, destruction of the consignment or any part thereof due to any reason
+						the Vendor shall: </p>
+					<p align="justify"> (a) Immediately inform the Company on phone and thereafter in writing with the
+						relevant details. </p>
+					<p align="justify"> (b) Immediately lodge a complaint with the concerned Police station and forward
+						the acknowledgement copy thereof to the Company and subsequently, also obtain and send to the
+						Company the First Information Report from the Police station. </p>
+					<p align="justify"> (c) In consultation with the Company shall arrange for the insurance survey and
+						shall provide all help and information to complete the survey. </p>
+					<p align="justify"> (d) Indemnify the company for any claims received by the company from its
+						customers </p>
+					<p align="justify"> 6. For the purpose of this Agreement, the Vendor agrees to only use Vehicles
+						which are with proper ownership and registration. The Vehicles must be clean, in good general
+						working condition and appearance and comply with all applicable laws and regulations (in
+						particular with regard to roadworthiness, insurance and environmental standards). The Vendor
+						shall not use the Vehicles for any purpose other than carrying the consignments entrusted by the
+						Company. </p>
+					<p align="justify"> 7. The Vendor shall provide one trained and experienced driver per Vehicle
+						holding a valid license to drive the class of vehicle. The Vendor shall ensure that drivers
+						convicted for criminal offences are not used for the purpose of performing services under this
+						Agreement. The Company reserves the right to require a security screening by its Security
+						Department for all drivers performing services under this Agreement. The Vendor will always be
+						exclusively responsible for its drivers. The Vendor must ensure that its drivers are always
+						properly dressed in the Company uniform and conduct themselves towards any third party in an
+						appropriate and courteous manner. The Vendor undertakes that none of its representative who is
+						involved in any act of moral turpitude, dishonesty, drug / alcohol abuse, act of indiscipline,
+						violence theft or any criminal activity of any kind whatsoever shall be used or employed for
+						providing the Service to the company under this agreement. </p>
+					<p align="justify"> 8. Motor vehicles/Road Tax, Insurance and any other statutory levy or duty,
+						including but not limited to Service tax, shall be the sole responsibility of the Vendor and the
+						Vendor shall submit proof of payment of the insurance premium and the applicable taxes and
+						duties to the Company immediately on execution hereof and after each subsequent payment thereof.
+						The Vendor shall ensure that the Vehicles are covered by a comprehensive insurance policy from
+						an approved Insurer. The Vendor shall be solely liable for all offences and penalties relating
+						to the Vehicles, including payment of fines and compensation for accidents and traffic offences
+						and shall keep the Company indemnified in this behalf at all times. </p>
+					<p align="justify"> 9. The Vendor shall maintain the Vehicles in a clean, presentable and roadworthy
+						condition at all times. All repairs and maintenance will be the sole responsibility of the
+						Vendor and the Company will not reimburse any costs and expenses relating to the repairs and
+						maintenance, breakdown or replacement of the Vehicles. The Vendor shall be liable to provide a
+						replacement vehicle having similar specifications within two hours in case of breakdown,
+						accident or seizure/detention of the Vehicle. </p>
+					<p align="justify"> 10. The Company shall (without giving prior notice to the Vendor),have the right
+						to inspect the Vendor premises/place of business to assure that the standards of the all
+						requirements are adhered to the Company reserves its right to conduct independent testing of the
+						vehicles and will be entitled to take appropriate action including of damages if the terms do
+						not conform to the standards the Vendor declares that he/she is aware of the quality and has
+						understood the requirement of the Company. The Company shall be sole judge of the quality of the
+						vehicle. In the event of the Vendor&rsquo;s vehicles not conforming to the standard of the
+						Company. The Company may accept or reject vehicles of substandard quality and inform the Vendor
+						that the vehicles are not to the specification&rsquo;s quality or satisfaction of the Company
+						and to pay a price less than the agreed price and the same shall be determined by the Company
+						only, at its own discretion. </p>
+					<p align="justify"> 11. Terms of Payment &ndash; As per Annexure A. Further Company may deduct TDS
+						deduction on the payment made to the vendor. </p>
+					<p align="justify"> 12. It is agreed that all carriage and other ancillary services, if any, shall
+						be performed by the Vendor in accordance with accepted professional standards, applicable laws
+						including but not limited to the Motor Vehicles Act, 1988, Motor Transport Workers Act, 1961 or
+						any Rules made thereunder, Carriage by Road Act 2007 and Carriage by Road Rule 2011 and in
+						strict compliance with the provisions of this Agreement and its Annexure. The Vendor shall
+						comply with all applicable laws and statutory obligations and any failure in this behalf shall
+						entitle the Company to terminate this Agreement. The Vendor shall keep all permits, licenses and
+						Vehicle insurance policies valid and subsisting during the term of this Agreement. None of the
+						employees of the Vendor shall be deemed to be employees of the Company. </p>
+					<p align="justify"> 13. The Vendor shall, at all times, take all appropriate measures to secure the
+						consignments to be carried. The Vendor shall be responsible for the security of the cargo and
+						shall not leave the Vehicles unattended. The Company will send its representative along with the
+						Vehicle. No unauthorized person shall be allowed to board the Vehicle. Each Vehicle will be
+						equipped with a fire extinguisher and a first aid kit. </p>
+					<p align="justify"> 14. The Vendor shall not sub-contract, delegate, assign or transfer, in any
+						manner whatsoever, the whole or any part of its rights, benefits and obligations hereunder
+						without the prior written consent of the Company in that behalf. The Company may, however,
+						assign this Agreement to any of its Affiliates, group companies. </p>
+					<p align="justify"> 15. The Vendor shall furnish copies of the Certificates of Registration,
+						Taxation, Insurance, PUC, Fitness, permits of the Vehicles together with the driving license of
+						the driver to the company. It will be the responsibility of Vendor to ensure that valid
+						statutory documents required to be carried in the vehicles as per rules are in the custody of
+						the driver. </p>
+					<p align="justify"> 16. The term of this Agreement shall commence from the Effective Date and is
+						valid for a period of two (2) years, unless terminated earlier in accordance with the terms of
+						this Agreement. The vendor can get out of this agreement by giving 7 days&rsquo; notice in
+						writing. </p>
+					<p align="justify"> 17. Notwithstanding anything contained herein, the Company shall have the right
+						to terminate the contract by giving 7 days&rsquo;notice without assigning any reason. In the
+						case of such termination, the Vendor shall not be entitled to any compensation for losses or
+						damages resulting from the termination. </p>
+					<p align="justify"> Without prejudice to any other remedies the Company may have against the Vendor,
+						it shall also have the right at any time to terminate the agreement forthwith, if any of the
+						following take place without giving any notice. </p>
+					<p align="justify"> a) If the Vendor supplies vehicles of sub-standard quality. </p>
+					<p align="justify"> b) If there is default in supplying the vehicles on time </p>
+					<p align="justify"> c) If the Vendor resorts to any unfair business practice. </p>
+					<p align="justify"> d) If the Vendor fails to perform his obligations under this agreement. </p>
+					<p align="justify"> e) If the Vendor enters into liquidation whether compulsorily or voluntarily
+						(otherwise, than for the purposes of amalgamation or reconstruction) or compound with their
+						creditors of take or reconstruction or compound with their creditors or take or suffer any
+						similar action in consequence of debt. </p>
+					<p align="justify"> f) If for any cause, the Vendor is prevented from performing its duties
+						hereunder for a period of one month or for a total period of one month in twelve calendar
+						months. </p>
+					<p align="justify"> g) If the Vendor is guilty of any conduct which in the opinion of the Company is
+						prejudicial to its interests. </p>
+					<p align="justify"> h) If the Vendor purports to assign the agreement without the consent in writing
+						of the Company. </p>
+					<p align="justify"> i) If the Vendor misbehaves with the customer / consignee / consignor of the
+						goods. </p>
+					<p align="justify"> 18. In the event the Vendor fails to provide the Vehicles in accordance with the
+						terms hereof, the Company shall be entitled to engage other vehicles &amp; deduct the costs
+						charges and expenses thereof from the amounts due and payable by the Company to the Vendor
+						hereunder. </p>
+					<p align="justify"> 19. The Vendor shall indemnify and keep the Company indemnified and harmless
+						against all costs, charges, penalty ,liability or fine, damage, judgment, and expenses including
+						, but not limited to , reasonable legal fee by way of suit, claim settlement incurred or
+						suffered by the company on account of (a)the Vendor or its agent or servant having committed
+						breach of any provision of this Agreement or the Motor Vehicles Act, 1988, Motor Transport
+						Workers Act, 1961 or any Rules made thereunder or any other applicable Act and Rules ,(b)from
+						any act negligence, omission or lapse by the Vendor , its employees and/ or agents in connection
+						with its offering of the Services under this Agreement. </p>
+					<p align="justify"> 20. Neither Party shall be responsible for failure to perform its obligations
+						hereunder due to events and/or circumstances, beyond its control, (including, as a mere e.g.
+						acts of God, wars, earthquake, floods, riots, fires, acts of Government, etc.). </p>
+					<p align="justify"> 21. The Vendor shall remain responsible for the safety and security of the
+						consignments until they are delivered at the destination. The Vendor agrees that in the event of
+						any loss or damage to the consignments or any part thereof during transit, that is from the time
+						they are entrusted to the Vendor till they are delivered to the Consignee at the destination,
+						due to any reason whatsoever, except due to any act of God or force majeure, the Vendor shall
+						make good the loss, costs, charges and expenses that the Company may suffer or incur due to the
+						loss or damage to the consignments or any part thereof. </p>
+					<p align="justify"> 22. The terms of this agreement, including but not limited to all the
+						information provided by the Company are confidential. The Vendor shall not directly or
+						indirectly engage in any conduct averse to the best interests of the Company. During the tenure
+						of the agreement and even after its termination, the Vendor cannot disclose any of the Company
+						information (including but not limited to their clients details, email ID, etc.) in any manner
+						possible, all such information is highly confidential. </p>
+					<p align="justify"> 23. Only courts in Bangalore will have jurisdiction to entertain and try all
+						disputes in connection herewith. </p>
+					<p align="justify" style=" margin-bottom: 0px; "><strong>Company Name</strong></p>
+					<div><p align="justify" style=" float: left;"><strong>Hiveloop Logistics Pvt. Ltd. </strong></p>
+						<p style=" float: right; margin-right: 140px"><strong>For Vendor</strong></p></div>
+					<br><br><br>
+					<div><p align="justify" style=" float: left;"><strong> Name: </strong></p>
+						<p style=" float: right;margin-right: 140px">
+							<strong>Name:{{onBoardingDetail.owner_name}}</strong></p>
+						<p align="justify"><strong> </strong></p></div>
+					<br><br>
+					<p align="center" class="annexure"><strong>Annexure A:</strong></p>
+					<p align="center"><strong>Price Stricture for 2 Tonner</strong></p><br>
+					<table align="center" cellpadding="7" cellspacing="0" class="table1" width="482">
+						<colgroup>
+							<col width="240"/>
+							<col width="212"/>
+						</colgroup>
+						<tbody>
+						<tr>
+							<td height="5" valign="bottom" width="240"><p> Vehicle Type: </p></td>
+							<td width="212"><p align="center"><strong>Mahindra Bolero &amp; Tata Super Ace</strong></p>
+							</td>
+						</tr>
+						<tr>
+							<td height="6" valign="bottom" width="240"><p> Type of Contract: </p></td>
+							<td width="212"><p align="center"><strong>Monthly Fixed</strong></p></td>
+						</tr>
+						<tr>
+							<td height="6" valign="bottom" width="240"><p> Payment Frequency: </p></td>
+							<td width="212"><p align="center"><strong>7 day</strong></p></td>
+						</tr>
+						<tr>
+							<td height="6" valign="bottom" width="240"><p><strong>Minimum Guaranteed payout for the
+								day </strong></p></td>
+							<td width="212"><p align="center"><strong>1200</strong></p></td>
+						</tr>
+						<tr>
+							<td colspan="2" height="6" valign="bottom" width="466"><p align="center"><strong>Pricing
+								Structure</strong></p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="6" width="240"><p> Price per Kg (Minimum 2000 Kg) </p></td>
+							<td width="212"><p align="center"><strong>0.5</strong></p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="6" width="240"><p> Price for covering 0-3 touch points </p></td>
+							<td width="212"><p align="center"><strong>200</strong></p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="6" width="240"><p> Price for covering 4-6 touch points </p></td>
+							<td width="212"><p align="center"><strong>300</strong></p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="6" width="240"><p> Price for covering 7-10 touch points </p></td>
+							<td width="212"><p align="center"><strong>400</strong></p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="6" width="240"><p> Price for covering 11-15 touch points </p></td>
+							<td width="212"><p align="center"><strong>500</strong></p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="5" width="240"><p> Price for covering 16 and above </p></td>
+							<td width="212"><p align="center"><strong>60/Per Touch Point</strong></p></td>
+						</tr>
+						</tbody>
+					</table>
+					<br>
+					<p align="center" class="TonnerSample"><strong>2 Tonner Sample Payouts</strong></p><br>
+					<table align="center" cellpadding="7" cellspacing="0" class="table1" width="511">
+						<colgroup>
+							<col width="85"/>
+							<col width="27"/>
+							<col width="27"/>
+							<col width="27"/>
+							<col width="27"/>
+							<col width="27"/>
+							<col width="27"/>
+							<col width="27"/>
+							<col width="27"/>
+							<col width="27"/>
+							<col width="26"/>
+						</colgroup>
+						<tbody>
+						<tr valign="bottom">
+							<td height="5" width="85"><p align="center"><strong>Touch Point</strong></p></td>
+							<td width="27"><p align="center"> 1 </p></td>
+							<td width="27"><p align="center"> 2 </p></td>
+							<td width="27"><p align="center"> 3 </p></td>
+							<td width="27"><p align="center"> 4 </p></td>
+							<td width="27"><p align="center"> 5 </p></td>
+							<td width="27"><p align="center"> 6 </p></td>
+							<td width="27"><p align="center"> 7 </p></td>
+							<td width="27"><p align="center"> 8 </p></td>
+							<td width="27"><p align="center"> 9 </p></td>
+							<td width="26"><p align="center"> 10 </p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="6" width="85"><p align="center"><strong>Sample Payout</strong></p></td>
+							<td width="27"><p align="center"> 1200 </p></td>
+							<td width="27"><p align="center"> 1200 </p></td>
+							<td width="27"><p align="center"> 1200 </p></td>
+							<td width="27"><p align="center"> 1300 </p></td>
+							<td width="27"><p align="center"> 1300 </p></td>
+							<td width="27"><p align="center"> 1300 </p></td>
+							<td width="27"><p align="center"> 1400 </p></td>
+							<td width="27"><p align="center"> 1400 </p></td>
+							<td width="27"><p align="center"> 1400 </p></td>
+							<td width="26"><p align="center"> 1400 </p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="6" width="85"><p align="center"><strong>Touch Point</strong></p></td>
+							<td width="27"><p align="center"> 11 </p></td>
+							<td width="27"><p align="center"> 12 </p></td>
+							<td width="27"><p align="center"> 13 </p></td>
+							<td width="27"><p align="center"> 14 </p></td>
+							<td width="27"><p align="center"> 15 </p></td>
+							<td width="27"><p align="center"> 16 </p></td>
+							<td width="27"><p align="center"> 17 </p></td>
+							<td width="27"><p align="center"> 18 </p></td>
+							<td width="27"><p align="center"> 19 </p></td>
+							<td width="26"><p align="center"> 20 </p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="5" width="85"><p align="center"><strong>Sample Payout</strong></p></td>
+							<td width="27"><p align="center"> 1500 </p></td>
+							<td width="27"><p align="center"> 1500 </p></td>
+							<td width="27"><p align="center"> 1500 </p></td>
+							<td width="27"><p align="center"> 1500 </p></td>
+							<td width="27"><p align="center"> 1500 </p></td>
+							<td width="27"><p align="center"> 1560 </p></td>
+							<td width="27"><p align="center"> 1620 </p></td>
+							<td width="27"><p align="center"> 1680 </p></td>
+							<td width="27"><p align="center"> 1740 </p></td>
+							<td width="26"><p align="center"> 1800 </p></td>
+						</tr>
+						</tbody>
+					</table>
+					<p align="center" class="priceTablebreak"><strong>Price Stricture for 1 Tonner</strong></p><br>
+					<table align="center" cellpadding="7" cellspacing="0" class="table1" width="377">
+						<colgroup>
+							<col width="237"/>
+							<col width="110"/>
+						</colgroup>
+						<tbody>
+						<tr>
+							<td height="5" valign="bottom" width="237"><p> Vehicle Type: </p></td>
+							<td width="110"><p align="center"><strong>Tata Ace</strong></p></td>
+						</tr>
+						<tr>
+							<td height="6" valign="bottom" width="237"><p> Type of Contract: </p></td>
+							<td width="110"><p align="center"><strong>Monthly Fixed</strong></p></td>
+						</tr>
+						<tr>
+							<td height="6" valign="bottom" width="237"><p> Payment Frequency: </p></td>
+							<td width="110"><p align="center"><strong>7 day</strong></p></td>
+						</tr>
+						<tr>
+							<td height="6" valign="bottom" width="237"><p><strong>Minimum Guaranteed Payout for the
+								day </strong></p></td>
+							<td width="110"><p align="center"><strong>1100</strong></p></td>
+						</tr>
+						<tr>
+							<td colspan="2" height="6" valign="bottom" width="361"><p align="center"><strong>Pricing
+								Structure</strong></p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="6" width="237"><p> Price per Kg (Minimum 1000 Kg) </p></td>
+							<td width="110"><p align="center"><strong>0.5</strong></p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="6" width="237"><p> Price for covering 0-4 touch points </p></td>
+							<td width="110"><p align="center"><strong>500</strong></p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="6" width="237"><p> Price for covering 5-8 touch points </p></td>
+							<td width="110"><p align="center"><strong>600</strong></p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="6" width="237"><p> Price for covering 8-12 touch points </p></td>
+							<td width="110"><p align="center"><strong>700</strong></p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="6" width="237"><p> Price for covering 13-15 above touch points </p></td>
+							<td width="110"><p align="center"><strong>800</strong></p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="5" width="237"><p> Price for covering 16 and Above </p></td>
+							<td width="110"><p align="center"><strong>30/Per Touch Point</strong></p></td>
+						</tr>
+						</tbody>
+					</table>
+					<p align="center" class="page-break-before"><strong>1 Tonner Sample Payout</strong></p><br><br>
+					<table align="center" cellpadding="7" cellspacing="0" class="table1" width="511">
+						<colgroup>
+							<col width="85"/>
+							<col width="27"/>
+							<col width="27"/>
+							<col width="27"/>
+							<col width="27"/>
+							<col width="27"/>
+							<col width="27"/>
+							<col width="27"/>
+							<col width="27"/>
+							<col width="27"/>
+							<col width="26"/>
+						</colgroup>
+						<tbody>
+						<tr valign="bottom">
+							<td height="5" width="85"><p align="center"><strong>Touch Point</strong></p></td>
+							<td width="27"><p align="center"> 1 </p></td>
+							<td width="27"><p align="center"> 2 </p></td>
+							<td width="27"><p align="center"> 3 </p></td>
+							<td width="27"><p align="center"> 4 </p></td>
+							<td width="27"><p align="center"> 5 </p></td>
+							<td width="27"><p align="center"> 6 </p></td>
+							<td width="27"><p align="center"> 7 </p></td>
+							<td width="27"><p align="center"> 8 </p></td>
+							<td width="27"><p align="center"> 9 </p></td>
+							<td width="26"><p align="center"> 10 </p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="6" width="85"><p align="center"><strong>Sample Payout</strong></p></td>
+							<td width="27"><p align="right"> 1000 </p></td>
+							<td width="27"><p align="right"> 1000 </p></td>
+							<td width="27"><p align="right"> 1000 </p></td>
+							<td width="27"><p align="right"> 1000 </p></td>
+							<td width="27"><p align="right"> 1100 </p></td>
+							<td width="27"><p align="right"> 1100 </p></td>
+							<td width="27"><p align="right"> 1100 </p></td>
+							<td width="27"><p align="right"> 1100 </p></td>
+							<td width="27"><p align="right"> 1200 </p></td>
+							<td width="26"><p align="right"> 1200 </p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="6" width="85"><p align="center"><strong>Touch Point</strong></p></td>
+							<td width="27"><p align="center"> 11 </p></td>
+							<td width="27"><p align="center"> 12 </p></td>
+							<td width="27"><p align="center"> 13 </p></td>
+							<td width="27"><p align="center"> 14 </p></td>
+							<td width="27"><p align="center"> 15 </p></td>
+							<td width="27"><p align="center"> 16 </p></td>
+							<td width="27"><p align="center"> 17 </p></td>
+							<td width="27"><p align="center"> 18 </p></td>
+							<td width="27"><p align="center"> 19 </p></td>
+							<td width="26"><p align="center"> 20 </p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="5" width="85"><p align="center"><strong>Sample Payout</strong></p></td>
+							<td width="27"><p align="right"> 1200 </p></td>
+							<td width="27"><p align="right"> 1200 </p></td>
+							<td width="27"><p align="right"> 1300 </p></td>
+							<td width="27"><p align="right"> 1300 </p></td>
+							<td width="27"><p align="right"> 1300 </p></td>
+							<td width="27"><p align="right"> 1330 </p></td>
+							<td width="27"><p align="right"> 1360 </p></td>
+							<td width="27"><p align="right"> 1390 </p></td>
+							<td width="27"><p align="right"> 1420 </p></td>
+							<td width="26"><p align="right"> 1450 </p></td>
+						</tr>
+						</tbody>
+					</table>
+					<p align="center" class="priceBreak"><strong>Price Stricture for less than 1 Tonner</strong></p><br>
+					<table align="center" cellpadding="7" cellspacing="0" class="table1" width="350">
+						<colgroup>
+							<col width="237"/>
+							<col width="84"/>
+						</colgroup>
+						<tbody>
+						<tr>
+							<td height="5" valign="bottom" width="237"><p> Vehicle Type: </p></td>
+							<td width="84"><p align="center"><strong>Ape</strong></p></td>
+						</tr>
+						<tr>
+							<td height="6" valign="bottom" width="237"><p> Type of Contract: </p></td>
+							<td width="84"><p align="center"><strong>Monthly Fixed</strong></p></td>
+						</tr>
+						<tr>
+							<td height="6" valign="bottom" width="237"><p> Payment Frequency: </p></td>
+							<td width="84"><p align="center"><strong>7 day</strong></p></td>
+						</tr>
+						<tr>
+							<td height="6" valign="bottom" width="237"><p><strong>Minimum Guaranteed Payout for the
+								day </strong></p></td>
+							<td width="84"><p align="center"><strong>900</strong></p></td>
+						</tr>
+						<tr>
+							<td colspan="2" height="6" valign="bottom" width="334"><p align="center"><strong>Pricing
+								Structure</strong></p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="6" width="237"><p> Price per Kg (Minimum 600Kg) </p></td>
+							<td width="84"><p align="center"><strong>0.5</strong></p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="6" width="237"><p> Price for covering 0-4 touch points </p></td>
+							<td width="84"><p align="center"><strong>600</strong></p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="6" width="237"><p> Price for covering 5-8 touch points </p></td>
+							<td width="84"><p align="center"><strong>700</strong></p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="6" width="237"><p> Price for covering 9-12 above touch points </p></td>
+							<td width="84"><p align="center"><strong>800</strong></p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="5" width="237"><p> Price for covering 13-18 above touch points </p></td>
+							<td width="84"><p align="center"><strong>1000</strong></p></td>
+						</tr>
+						</tbody>
+					</table>
+					<p align="center" class="lessThan"><strong>Less than 1 Tonner Sample Payout</strong></p><br>
+					<table align="center" cellpadding="7" cellspacing="0" class="table1" width="401">
+						<colgroup>
+							<col width="70"/>
+							<col width="21"/>
+							<col width="21"/>
+							<col width="21"/>
+							<col width="21"/>
+							<col width="21"/>
+							<col width="21"/>
+							<col width="21"/>
+							<col width="21"/>
+							<col width="20"/>
+						</colgroup>
+						<tbody>
+						<tr valign="bottom">
+							<td height="5" width="70"><p align="center"><strong>Touch Point</strong></p></td>
+							<td width="21"><p align="center"> 1 </p></td>
+							<td width="21"><p align="center"> 2 </p></td>
+							<td width="21"><p align="center"> 3 </p></td>
+							<td width="21"><p align="center"> 4 </p></td>
+							<td width="21"><p align="center"> 5 </p></td>
+							<td width="21"><p align="center"> 6 </p></td>
+							<td width="21"><p align="center"> 7 </p></td>
+							<td width="21"><p align="center"> 8 </p></td>
+							<td width="20"><p align="center"> 9 </p></td>
+						</tr>
+						</tbody>
+						<tbody>
+						<tr valign="bottom">
+							<td height="6" width="70"><p align="center"><strong>Sample Payout</strong></p></td>
+							<td width="21"><p align="center"> 900 </p></td>
+							<td width="21"><p align="center"> 900 </p></td>
+							<td width="21"><p align="center"> 900 </p></td>
+							<td width="21"><p align="center"> 900 </p></td>
+							<td width="21"><p align="center"> 1000 </p></td>
+							<td width="21"><p align="center"> 1000 </p></td>
+							<td width="21"><p align="center"> 1000 </p></td>
+							<td width="21"><p align="center"> 1000 </p></td>
+							<td width="20"><p align="center"> 1100 </p></td>
+						</tr>
+						</tbody>
+						<tbody>
+						<tr valign="bottom">
+							<td height="6" width="70"><p align="center"><strong>Touch Point</strong></p></td>
+							<td width="21"><p align="center"> 10 </p></td>
+							<td width="21"><p align="center"> 11 </p></td>
+							<td width="21"><p align="center"> 12 </p></td>
+							<td width="21"><p align="center"> 13 </p></td>
+							<td width="21"><p align="center"> 14 </p></td>
+							<td width="21"><p align="center"> 15 </p></td>
+							<td width="21"><p align="center"> 16 </p></td>
+							<td width="21"><p align="center"> 17 </p></td>
+							<td width="20"><p align="center"> 18 </p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="5" width="70"><p align="center"><strong>Sample Payout</strong></p></td>
+							<td width="21"><p align="center"> 1100 </p></td>
+							<td width="21"><p align="center"> 1100 </p></td>
+							<td width="21"><p align="center"> 1100 </p></td>
+							<td width="21"><p align="center"> 1100 </p></td>
+							<td width="21"><p align="center"> 1300 </p></td>
+							<td width="21"><p align="center"> 1300 </p></td>
+							<td width="21"><p align="center"> 1300 </p></td>
+							<td width="21"><p align="center"> 1300 </p></td>
+							<td width="20"><p align="center"> 1300 </p></td>
+						</tr>
+						</tbody>
+					</table>
+					<br>
+					<p><strong>Penalty Policy</strong></p>
+					<p><strong>Last Mile App Penalty</strong></p>
+					<p> &bull; Driver who does not uses the last mail app for delivers </p>
+					<p> Penalty Amount is 500/- </p>
+					<p> &bull; Driver who does not mark the appropriate deliver status on the last mile app </p>
+					<p> Penalty Amount is 200/- </p>
+					<p> Note 1: we are currently considering this only in case of </p>
+					<p> delivery and not in case of RTO or Reattempt </p>
+					<p> Note 2: on the same if driver is eligible for incentive, we are not paying any incentive also we
+						are not charging penalty too </p>
+					<p> &bull; Driver who does not mark all deliver points on the app </p>
+					<p> Penalty Amount is 200/- </p>
+					<p> &bull; Driver who does not mark the deliver status at the shop but </p>
+					<p> marks all points at one&rsquo;s.. </p>
+					<p> Penalty Amount is 200/- </p>
+					<p><strong>Runsheet Closure</strong></p>
+					<p> &bull; Driver should close his Runsheet with in 11:59PM of the same day </p>
+					<p> Penalty Amount is 400/- </p>
+					<p> &bull; Driver returns to the hub and does not attempt all delivery points allocated to him </p>
+					<p> Penalty Amount is 1,000/- </p>
+					<p> &bull; Driver denial any route which was allocated to him Penalty Amount is 1,000/- </p>
+					<p><strong>Credit &amp; Deliver Charges Collection</strong></p>
+					<p> &bull; A driver collects cash for a credit order hi will be changed a </p>
+					<p> penalty </p>
+					<p> Penalty Amount is 100% of the payment </p>
+					<p> &bull; A driver collects Deliver changes for a orders when the deliver </p>
+					<p> is free of cost </p>
+					<p> Penalty Amount 500/- </p>
+					<p><strong>COD Closure</strong></p>
+					<p> &bull; If a Driver uses COD amount collated by him agents deliver order </p>
+					<p> Penalty Amount is 500/- </p>
+					<p> &bull; If a driver does not close his COD amount for any particular day </p>
+					<p> 1) Penalty Amount is 50% of the payment </p>
+					<p> (In case of 1st Warning) </p>
+					<p> 2) Penalty Amount is 100% of the payment and contract </p>
+					<p> termination with HLPL </p>
+					<p> (In Case of repetitive offence) </p>
+					<p align="center"><strong>Absenteeism</strong></p>
+					<p align="center"> &bull; A weekly off which is been take without prior approval will be considered
+						as absent and a Penalty will be changed basis below table. </p><br>
+					<table align="center" cellpadding="7" cellspacing="0" class="table1" width="440">
+						<colgroup>
+							<col width="136"/>
+							<col width="140"/>
+							<col width="160"/>
+						</colgroup>
+						<tbody>
+						<tr valign="bottom">
+							<td height="5" width="136"><p><strong>Previous Day</strong></p></td>
+							<td width="140"><p><strong>Actual Day</strong></p></td>
+							<td width="160"><p><strong>Penalty</strong></p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="6" width="136"><p> Conformed </p></td>
+							<td width="140"><p> Absent </p></td>
+							<td width="160"><p align="right"> 2000 </p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="6" width="136"><p> No Replay </p></td>
+							<td width="140"><p> Absent </p></td>
+							<td width="160"><p align="right"> 2000 </p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="6" width="136"><p> No Replay </p></td>
+							<td width="140"><p> Present </p></td>
+							<td width="160"><p> Not Eligible For MG </p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="5" width="136"><p> Not Conformed </p></td>
+							<td width="140"><p> Present </p></td>
+							<td width="160"><p> Not Eligible For MG </p></td>
+						</tr>
+						</tbody>
+					</table>
+					<br>
+					<p><strong>Driver Leave Process</strong></p>
+					<p> Eligibility: </p>
+					<p> 1) Drives who have an active agreement signed with HLPL. </p>
+					<p> 2) All drivers present for 26 days are eligible for 4 weekly offs. </p>
+					<p> 3) New driver who would have joined during the month will also be eligible weekly off as per
+						prorated basis. </p>
+					<p> 4) Apart from 4 weekly off driver will be eligible for Hub Holidays this holiday will be
+						informed 3 days prior to the holiday. </p>
+					<p> 5) All contracted drivers are eligible for a service bonus of 500/- INR in addition to the
+						existing pay on the day worked from the below list. </p>
+					<p> Process: </p>
+					<p> Driver must conform on his availability for the next day by 5:00pm of the previous day. </p>
+					<p align="center"> Table of all possible combination with the penalty. </p>
+					<table align="center" cellpadding="7" cellspacing="0" class="table1" width="405">
+						<colgroup>
+							<col width="116"/>
+							<col width="89"/>
+							<col width="155"/>
+						</colgroup>
+						<tbody>
+						<tr>
+							<td height="5" width="116"><p><strong>Previous Day</strong></p></td>
+							<td width="89"><p><strong>Actual Day</strong></p></td>
+							<td width="155"><p><strong>Penalty</strong></p></td>
+						</tr>
+						<tr>
+							<td height="5" width="116"><p> Conformed </p></td>
+							<td width="89"><p> Present </p></td>
+							<td width="155"><p> Nil </p></td>
+						</tr>
+						<tr>
+							<td height="5" width="116"><p> Not Conformed </p></td>
+							<td width="89"><p> Absent </p></td>
+							<td width="155"><p> Nil </p></td>
+						</tr>
+						<tr>
+							<td height="5" width="116"><p> Conformed </p></td>
+							<td width="89"><p> Absent </p></td>
+							<td width="155"><p> 2,000/- </p></td>
+						</tr>
+						<tr>
+							<td height="5" width="116"><p> No Replay </p></td>
+							<td width="89"><p> Absent </p></td>
+							<td width="155"><p> 2,000/- </p></td>
+						</tr>
+						<tr>
+							<td height="5" width="116"><p> No Replay </p></td>
+							<td width="89"><p> Present </p></td>
+							<td width="155"><p> Not Eligible For MG </p></td>
+						</tr>
+						<tr>
+							<td height="5" width="116"><p> Not Conformed </p></td>
+							<td width="89"><p> Present </p></td>
+							<td width="155"><p> Not Eligible For MG </p></td>
+						</tr>
+						</tbody>
+					</table>
+					<br>
+					<p> Example for calculation of weekly off: </p>
+					<p> 2.1) Joining date: - 24<sup>th</sup> December 2018 </p>
+					<p> 2.2) Vehicle category: - Tata Ace </p>
+					<p> 2.2) No of active day in current month have been 7 days. </p>
+					<p> 2.3) week off eligible is 1 days </p>
+					<p> 2.4) Any other leaves will be penalized as per the MG chart </p>
+					<p align="center" class="page-break-before"> List of Days for which drivers will be eligible for
+						Service Bonus: </p>
+					<table align="center" cellpadding="7" cellspacing="0" class="table1" width="306">
+						<colgroup>
+							<col width="131"/>
+							<col width="145"/>
+						</colgroup>
+						<tbody>
+						<tr valign="bottom">
+							<td height="2" width="131"><p><strong>Dates</strong></p></td>
+							<td width="145"><p><strong>Events</strong></p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="3" width="131"><p> 26th January 2019 </p></td>
+							<td width="145"><p> Republic Day </p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="3" width="131"><p> 6th April 2019 </p></td>
+							<td width="145"><p> Ugadi </p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="3" width="131"><p> 1st May 2019 </p></td>
+							<td width="145"><p> Labour Day </p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="3" width="131"><p> 4th June 2019 </p></td>
+							<td width="145"><p> Eid-Ul-Fitr </p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="3" width="131"><p> 15th August 2019 </p></td>
+							<td width="145"><p> Independence Day </p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="3" width="131"><p> 2nd October 2019 </p></td>
+							<td width="145"><p> Gandhi Jayanthi </p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="3" width="131"><p> 7th October 2019 </p></td>
+							<td width="145"><p> Ayudha Pooja </p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="3" width="131"><p> 27th October 2019 </p></td>
+							<td width="145"><p> Diwali </p></td>
+						</tr>
+						<tr valign="bottom">
+							<td height="4" width="131"><p> 1st November 2019 </p></td>
+							<td width="145"><p> Karnataka Rajyotsava </p></td>
+						</tr>
+						</tbody>
+					</table>
+					<br>
+					<p> Note: All drivers who works on the above days will get an extra service bonus of 500/-. </p>
+				</div>
+			</td>
+		</tr>
+		</tbody>
+		<tfoot>
+		<tr>
+			<td>
+				<div class="footer-space">&nbsp;</div>
+			</td>
+		</tr>
+		</tfoot>
+	</table>
+	<div class="header"><p align="center" style="margin:0px auto"><strong>Hiveloop Logistics Private Limited</strong>
+	</p>
+		<p align="center" style="margin:0px auto 0px 50px"> Registered office | No. 1090/O, Municipal No.1580/1090/O,
+			17th Main, Sector 3, HSR Layout,</p>
+		<p align="center" style="margin:0px auto"> Bangalore -560102 </p></div>
+</div>

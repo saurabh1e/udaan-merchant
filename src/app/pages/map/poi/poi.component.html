@@ -1,0 +1,29 @@
+<div class="d-flex flex-column justify-content-between p-3" style="height: 100%">
+	<div class="bg-white" style="flex-grow: 1">
+		<nb-list>
+
+			<nb-list-item *ngFor="let poi of pois;let i = index">
+				<div class="d-flex justify-content-between">
+					<div (click)="emitPoiFence.emit({data: poi, status: true, fitBound: true})">{{poi.name}}</div>
+
+					<!--          <i (click)="emitEditPOI.emit(poi)" class="eva-icon-container">-->
+					<!--            <i [innerHTML]="'edit' | eva: { animationType: 'pulse', fill: 'blue' }"></i>-->
+					<!--          </i>-->
+
+					<nb-icon (click)="deletePOI(poi.id, i)" icon="close"></nb-icon>
+					<!--          <i (click)="deletePOI(poi.id, i)" class="eva-icon-container">-->
+					<!--            <i [innerHTML]="'close' | eva: { animationType: 'pulse', fill: 'red' }"></i>-->
+					<!--          </i>-->
+				</div>
+
+
+			</nb-list-item>
+
+		</nb-list>
+	</div>
+
+	<div class="d-flex justify-content-between">
+		<button (click)="addAll()" nbButton outline shape="rectangle" size="small">View All</button>
+		<button (click)="clearAll()" nbButton outline shape="rectangle" size="small">Clear All</button>
+	</div>
+</div>

@@ -1,0 +1,9 @@
+.Request-Form {
+
+	/deep/ {
+		.owl-dt-inline-container {
+			box-shadow: none !important;
+			border: 1px solid inherit;
+		}
+	}
+}

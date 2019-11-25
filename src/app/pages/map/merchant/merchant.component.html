@@ -1,0 +1,13 @@
+<div *ngIf="active" class="d-inline-flex justify-content-around p-3"
+	 style="overflow-x: auto;background: #fff;border-radius: 4px;">
+	<ng-container *ngFor="let type of types;let l = last">
+		<div (click)="openRequestDialog(type)" class="d-inline-flex " style="cursor: pointer">
+			<nb-icon [options]="{ height: 36, width: 36, fill: '#a4abb3' }" icon="car-outline"></nb-icon>
+			<div class="text-center font-weight-bold text-dark align-self-center ml-2">
+				{{type.name}}
+			</div>
+		</div>
+		<div *ngIf="!l" class="border-right mx-3"></div>
+	</ng-container>
+
+</div>

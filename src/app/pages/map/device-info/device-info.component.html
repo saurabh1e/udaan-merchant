@@ -1,0 +1,127 @@
+<div class="row py-3 px-2 bg-white">
+
+	<div class="col-4 d-flex align-items-center flex-column border-right">
+
+		<nb-user [name]="device.name" [title]="getDeviceList()"></nb-user>
+
+		<h6 class="my-3">{{device.phone}}</h6>
+
+		<div class="row ml-2">
+			<div class="col-6 d-flex flex-column">
+				<label class="small">ZONE</label>
+
+				<span class="small">{{branches}}</span>
+			</div>
+			<div class="col-6 d-flex flex-column">
+				<label class="small">GEO FENCE</label>
+				<ng-container *ngIf="device?.user_device?.in_zone === false; else inGeo">
+					<div class="d-flex align-content-center">
+						<nb-icon [options]="{ width: 16, height: 16, fill: 'red' }" icon="globe-outline"></nb-icon>
+						<span class="ml-3 small">OUT</span>
+					</div>
+				</ng-container>
+
+				<ng-template #inGeo>
+					<div>
+						<nb-icon [options]="{ width: 16, height: 16, fill: 'green' }" icon="globe-outline"></nb-icon>
+						<span class="ml-3">In</span>
+					</div>
+				</ng-template>
+
+			</div>
+			<div class="col-6 d-flex flex-column">
+				<label class="small">GPS LOCATION</label>
+				<nb-icon [options]="{ width: 16, height: 16 }" icon="compass-outline"></nb-icon>
+			</div>
+			<div class="col-6 d-flex flex-column">
+				<label class="small">SPEED KMPH</label>
+				<div>
+					<nb-icon icon="flash-outline"></nb-icon>
+					<span class="ml-3">{{ device?.user_device?.speed | number: '1.1-1'}} </span>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+
+	<div class="col-3 border-right d-flex align-items-start flex-column">
+		<span class="mb-3 h6 font-w-regular">ORDER DETAILS</span>
+
+		<small class="mt-2 text-dark">Order No: {{ device.current_order?.order_no }} </small>
+		<small class="mt-2 text-dark">Merchant : {{ device.current_order?.outlet?.name }} </small>
+		<small class="mt-2 text-dark">Start
+			Time: {{ device.current_order?.start_trip || device.current_order?.start_duty_time | date: 'short' }} </small>
+		<small class="mt-2 text-dark">Status: {{ device.current_order?.status_name }} </small>
+	</div>
+
+	<div *ngIf="device?.id" class="col-5 d-flex align-items-start flex-column">
+		<span class="h6 mb-3">EXTRA INFO</span>
+		<div>
+			<small class="text-dark">Address: {{ device.curr_address }} </small>
+
+		</div>
+		<!--<div>-->
+		<!--<small class="text-dark">Latitude: {{ device?.lat }} </small>-->
+
+		<!--</div>-->
+
+		<!--<small class="text-dark">Longitude: {{ device?.lng }} </small>-->
+
+		<div class="d-flex justify-content-between" style="width: 100%">
+
+			<input [nbDatepicker]="formpicker" class="mr-3" nbInput placeholder="Pick Date Range" style="width: 150px">
+			<nb-rangepicker #formpicker (rangeChange)="changeRange($event)"></nb-rangepicker>
+
+
+			<button (click)="track();showTrack=!showTrack" *ngIf="showTrack" fullWidth
+					nbButton shape="rectangle"
+					size="small" status="info">Show Path
+			</button>
+
+			<button
+				(click)="sendPath.emit([]);showTrack=!showTrack"
+				*ngIf="!showTrack" fullWidth
+				nbButton shape="rectangle"
+				size="small" status="danger">Hide Path
+			</button>
+
+
+		</div>
+
+		<div class="mt-4 d-flex justify-content-between">
+			<button (click)="showTouchPoints();showTouchPoint=!showTouchPoint" *ngIf="showTouchPoint" fullWidth
+					nbButton shape="rectangle"
+					size="small" status="primary">Show TouchPoints
+			</button>
+
+			<button
+				(click)="sendTouchPoints.emit({points: []});showTouchPoint=!showTouchPoint"
+				*ngIf="!showTouchPoint" fullWidth
+				nbButton shape="rectangle"
+				size="small" status="danger">Hide Touch Points
+			</button>
+
+			<button (click)="replay('fast')" *ngIf="!playReplay" [disabled]="showTrack" class="ml-3"
+					fullWidth="" nbButton shape="rectangle"
+					size="small" status="info">Replay
+			</button>
+
+			<button (click)="replay('stop')" *ngIf="playReplay" class="ml-3"
+					fullWidth="" nbButton shape="rectangle"
+					size="small" status="danger">Clear Replay
+			</button>
+
+		</div>
+
+		<br>
+		<!--<div *ngIf="replayStatus" class="d-flex justify-content-between align-items-center">-->
+		<!--<div class="h6 mb-3">Replay</div>-->
+		<!--<button (click)="replay('fast')" nbButton shape="rectangle" size="small" status="info">Fast</button>-->
+		<!--<button (click)="replay('slow')" nbButton shape="rectangle"-->
+		<!--class="ml-3" size="small" status="info">Slow</button>-->
+		<!--<button (click)="replay('normal')" nbButton shape="rectangle"-->
+		<!--class="ml-3" size="small" status="info">Normal</button>-->
+		<!--</div>-->
+	</div>
+</div>
