@@ -25,10 +25,10 @@ export class VehicleComponent implements OnInit {
 			name: 'type',
 			displayName: 'Type',
 		},
-		{
-			name: 'storage',
-			displayName: 'Storage',
-		},
+		// {
+		// 	name: 'storage',
+		// 	displayName: 'Storage',
+		// },
 	];
 
 	constructor() {

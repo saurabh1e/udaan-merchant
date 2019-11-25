@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, SimpleChanges, OnChanges} from '@angular/core';
 import {DataService, ToastService} from '../../../@core/utils';
 import {Router} from '@angular/router';
 
@@ -7,7 +7,7 @@ import {Router} from '@angular/router';
 	templateUrl: './user-list.component.html',
 	styleUrls: ['./user-list.component.scss'],
 })
-export class UserListComponent implements OnInit {
+export class UserListComponent implements OnInit, OnChanges {
 
 	@Input()
 	serial: string = '1';
@@ -27,12 +27,20 @@ export class UserListComponent implements OnInit {
 	ngOnInit() {
 		if (this.vehicleId) {
 			this.filters['__is_rider__bool'] = true;
+			this.filters['__active__bool'] = true;
 		} else {
 			this.filters['__is_admin__bool'] = true;
 			this.filters['__active__bool'] = true;
 			this.getUser();
 		}
 	}
+
+	ngOnChanges(changes: SimpleChanges): void {
+		console.log(changes);
+		if (changes.hasOwnProperty('branchId')) {
+		  this.getUser();
+		}
+	  }
 
 	async getUser() {
 		try {

@@ -1,0 +1,17 @@
+
+span {
+    font-size: 12px !important;
+    white-space: wrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  div label {
+    margin: 0;
+    font-size: 12px;
+  }
+  
+  :host ::ng-deep  nb-user div.user-name {
+    font-size: 12px !important;
+  }
+  

@@ -25,6 +25,56 @@
 	@include ngx-pace-theme();
 
 	@include nb-overrides();
-}
+};
 
-;
+.nb-theme-corporate .menu-sidebar .scrollable {
+	padding-top: 0 !important;
+  }
+.nb-theme-corporate nb-sidebar .main-container {
+	background: #111217;
+  }
+.nb-theme-corporate nb-menu {
+	background: transparent;
+  }
+  .nb-theme-corporate nb-menu .menu-item:nth-child(1) a nb-icon {
+	color: #59a1ff !important;
+  }
+  .nb-theme-corporate nb-menu .menu-item:nth-child(2) a nb-icon {
+	color: #7659ff !important;
+  }
+  .nb-theme-corporate nb-menu .menu-item:nth-child(3) a nb-icon {
+	color: #ff2db5 !important;
+  }
+  .nb-theme-corporate nb-menu .menu-item:nth-child(4) a nb-icon {
+	color: #00adc3 !important;
+  }
+  .nb-theme-corporate nb-menu .menu-items > .menu-item {
+	border-top: none;
+	border-bottom: 1px solid #333;
+	color: white;
+	font-weight: bold;
+  }
+  .nb-theme-corporate .nb-sidebar .scrollable {
+	padding-top: 0 !important;
+  }
+
+  .menu-sidebar .menu-item a .menu-title {
+	color: #fff;
+  }
+  .nb-theme-corporate .header-container .navigation {
+	font-size: 2.5rem;
+  }
+  .nb-theme-corporate nb-user.shape-round .user-picture{
+	background: #ffffff;
+	border: solid 2px #bcc3cc;
+  }
+  .menu-sidebar.expanded .menu-item a.active {
+	border-right: 8px solid #59a1ff;
+  }
+  .nb-theme-corporate nb-layout .layout nb-layout-header nav {
+	background: #e3e9ed;
+	color: #000;
+  }
+  .route-tabset .route-tab{
+	  margin: auto !important;
+  }

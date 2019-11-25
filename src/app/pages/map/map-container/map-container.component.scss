@@ -23,17 +23,18 @@
 }
 
 .device-list {
-	position: fixed;
-	bottom: 4px;
-	width: 300px;
-	//height: calc(100vh - 80px);
+	position: absolute;
 	background-color: #f1f5f8;
 	border-radius: 0;
 	z-index: 999;
 	overflow-y: hidden;
 	margin-left: -16px;
-	top: 76px;
-}
+	top: 0px;
+	left: 0px;
+	width:300px !important ;
+	height: calc(100vh - 120px) !important;
+	box-shadow: 0 -3px 6px rgba(0, 0, 0, 0.3)  !important;
+  }
 
 .merchant-list {
 	position: absolute;
@@ -63,9 +64,10 @@
 	background: white;
 	width: calc(100% - 299px);
 	z-index: 999;
-	right: 0;
-	bottom: 0;
-}
+	right: 0px;
+	bottom: 0px;
+	box-shadow: 0 -3px 6px rgba(0,0,0,0.08) !important;
+  }
 
 /deep/ {
 	.leaflet-left {

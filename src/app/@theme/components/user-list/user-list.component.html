@@ -1,5 +1,5 @@
 <nb-card>
-	<nb-card-header>{{serial}}. <span *ngIf="isAdmin">Admin</span> <span *ngIf="vehicleId || !isAdmin">Rider</span>
+	<nb-card-header>{{serial}}. <span *ngIf="isAdmin">Admin</span> <span *ngIf="vehicleId || !isAdmin">Driver</span>
 		Users
 	</nb-card-header>
 	<nb-card-body class="p-4">
@@ -27,7 +27,7 @@
 
 	</nb-card-body>
 
-	<nb-card-footer class="d-flex justify-content-end">
+	<!-- <nb-card-footer class="d-flex justify-content-end">
 		<button (click)="editUser()" nbButton shape="rectangle" status="primary">Add New</button>
-	</nb-card-footer>
+	</nb-card-footer> -->
 </nb-card>

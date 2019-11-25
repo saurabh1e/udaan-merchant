@@ -1,15 +1,15 @@
 <div class="map-container">
 	<div class="parent">
-
-		<div
-			(leafletMapReady)="onMapReady($event)"
-			[leafletLayers]="layerMainGroup"
-			[leafletOptions]="options"
-			class="child"
-			leaflet
-			style="height: calc(100vh - 120px)">
-
-			<div (leafletDrawCreated)="created($event, 'geo_fence')"
+  
+	  <div
+		(leafletMapReady)="onMapReady($event)"
+		[leafletLayers]="layerMainGroup"
+		[leafletOptions]="options"
+		class="child"
+		leaflet
+		style="height: calc(100vh - 120px)">
+  
+		<div (leafletDrawCreated)="created($event, 'geo_fence')"
 				 *ngIf="display === 'geoFence'"
 				 [leafletDrawOptions]="drawOptions"
 				 leafletDraw></div>
@@ -18,117 +18,118 @@
 				 *ngIf="display === 'poi'"
 				 [leafletDrawOptions]="poiOptions"
 				 leafletDraw></div>
-		</div>
-
+	  </div>
+  
 	</div>
-
-
-	<div *nbIsGranted="['view', 'merchantOrderCreation']" class="merchant-list rounded">
-		<ngx-merchant (showRiders)="merchantNearByRiders($event)">
-
-		</ngx-merchant>
-	</div>
-
-	<div style="position: absolute;width: 100%;bottom:0;">
-
-		<div *ngIf="toggleVal" class="device-list">
-
-			<ngx-device-list (changeDevice)="updateDeviceList($event)" (initialEmit)="initialMarkers($event)"
-							 (selectDevice)="setDevice($event)">
-
-			</ngx-device-list>
+	
+	<div
+		(click)="toggleList()"
+		[ngClass]='toggleClass'
+		style="position: fixed;bottom: 0;border-radius: 0;z-index: 9999;    height: calc(100vh - 120px);overflow-y: auto;margin-left: 284px;top: 50%;">
+		<div [ngClass]='toggleStyle' style=" padding: 5px 7px;background: #000;transform: rotate(180deg)">
+		  <div>
+			<nb-icon [options]="{  height: 24, width: 24, fill: 'grey' }" icon="arrow-ios-forward-outline"></nb-icon>
+		  </div>
 		</div>
-		<div
-			(click)="toggleList()"
-			[ngClass]='toggleClass'
-			style="position: fixed;bottom: 0;border-radius: 0;z-index: 999;    height: calc(100vh - 120px);overflow-y: auto;margin-left: 280px;top: 50%;">
-			<div [ngClass]='toggleStyle' style=" padding: 5px 7px;background: #000;transform: rotate(180deg)">
-				<div style="">
-					<nb-icon [options]="{  height: 24, width: 24, fill: 'grey' }"
-							 icon="arrow-ios-forward-outline"></nb-icon>
-				</div>
-			</div>
+	  </div>
 
+		<div *nbIsGranted="['view', 'merchantOrderCreation']" class="merchant-list rounded">
+			<ngx-merchant (showRiders)="merchantNearByRiders($event)">
+	
+			</ngx-merchant>
 		</div>
-
-		<!--<div (click)="toggleInfo()"-->
-		<!--*ngIf="showDeviceInfo"-->
-		<!--[ngClass]="toggleInfoClass"-->
-		<!--style="position: absolute;bottom: 320px;border-radius: 0;z-index: 999;width: 100%;">-->
-		<!--<div style="padding: 7px 7px;background: #000;width: 38px;margin: 0 auto;">-->
-		<!--<div>-->
-		<!--<i class="eva-icon-container">-->
-		<!--<i [innerHTML]="'info-outline' | eva: { animationType: 'pulse', fill: 'white', height: 24, width: 24}"></i>-->
-		<!--</i>-->
-		<!--</div>-->
-		<!--</div>-->
-		<!--</div>-->
-		<!--<div *ngIf="toggleInfoVal">-->
-		<div *ngIf="showDeviceInfo" class="device-info">
-			<div style="position: absolute;right: 6px;z-index: 9999">
-				<nb-icon (click)="toggleInfo(!showDeviceInfo)" [options]="{  height: 24, width: 24, fill: 'red' }"
-						 icon="close"></nb-icon>
-			</div>
-			<ngx-device-info (replayPath)="showReplay($event)" (sendPath)="showPath($event)"
-							 (sendTouchPoints)="showTouchPoints($event)"
-							 [device]="device"></ngx-device-info>
+	
+  
+	<div>
+  
+	  <div *ngIf="toggleVal" class="device-list">
+  
+		<ngx-device-list (changeDevice)="updateDeviceList($event)" (initialEmit)="initialMarkers($event)"
+						 (selectDevice)="setDevice($event)">
+  
+		</ngx-device-list>
+	  </div>
+  
+  
+	  <!--<div (click)="toggleInfo()"-->
+	  <!--*ngIf="showDeviceInfo"-->
+	  <!--[ngClass]="toggleInfoClass"-->
+	  <!--style="position: absolute;bottom: 320px;border-radius: 0;z-index: 999;width: 100%;">-->
+	  <!--<div style="padding: 7px 7px;background: #000;width: 38px;margin: 0 auto;">-->
+	  <!--<div>-->
+	  <!--<i class="eva-icon-container">-->
+	  <!--<i [innerHTML]="'info-outline' | eva: { animationType: 'pulse', fill: 'white', height: 24, width: 24}"></i>-->
+	  <!--</i>-->
+	  <!--</div>-->
+	  <!--</div>-->
+	  <!--</div>-->
+	  <!--<div *ngIf="toggleInfoVal">-->
+	  <div *ngIf="showDeviceInfo" class="device-info">
+		<div style="position: absolute;right: -8px; top:5px;">
+		  <nb-icon (click)="toggleInfo(!showDeviceInfo)" [options]="{  height: 24, width: 24, fill: 'black' }"
+				   icon="close"></nb-icon>
 		</div>
+		<ngx-device-info (replayPath)="showReplay($event)" (sendPath)="showPath($event)"
+		(sendTouchPoints)="showTouchPoints($event)"
+		[device]="device"></ngx-device-info>
+</div>
 	</div>
 	<!--</div>-->
-
-	<div style="position: absolute;bottom: -32px;right: 0">
-		<div class="d-flex justify-content-end">
-			<div class=" d-flex justify-content-between align-items-end bottom-bar"
-				 style="z-index: 999;">
-				<nb-icon (click)="setOutlets('outlets')" class="mr-3" icon="layers-outline"></nb-icon>
-				<nb-icon class="mr-3" icon="compass-outline"></nb-icon>
-				<nb-icon (click)="setDisplay('geoFence')" class="mr-3" icon="map-outline"></nb-icon>
-				<nb-icon (click)="setDisplay('poi')" class="" icon="star-outline"></nb-icon>
-			</div>
-		</div>
+  
+	<!-- <div style="position: absolute;bottom: -32px;right: 0">
+	  <div class="d-flex justify-content-end">
+		<div class=" d-flex justify-content-between align-items-end bottom-bar"
+			 style="z-index: 999;">
+			 <nb-icon (click)="setOutlets('outlets')" class="mr-3" icon="layers-outline"></nb-icon>
+			 <nb-icon class="mr-3" icon="compass-outline"></nb-icon>
+			 <nb-icon (click)="setDisplay('geoFence')" class="mr-3" icon="map-outline"></nb-icon>
+			 <nb-icon (click)="setDisplay('poi')" class="" icon="star-outline"></nb-icon>
+ </div>
+	  </div>
 	</div>
-
-
+   -->
+  
 	<ngx-geo-fence (emitGeoFence)="geoFenceUpdate($event)"
 				   *ngIf="display === 'geoFence'" [data]="poisData"
 				   class="fixed-right-bottom bg-white" style="z-index: 999">
-
+  
 	</ngx-geo-fence>
-
+  
 	<ngx-poi (emitEditPOI)="editPOI($event)" (emitPoiFence)="updatePOI($event)" *ngIf="display === 'poi'"
-			 [data]="poisData"
-			 class="fixed-right-bottom bg-white" style="z-index: 999">
+	[data]="poisData"
+	class="fixed-right-bottom bg-white" style="z-index: 999">
 
 	</ngx-poi>
-
+  
 	<div *ngIf="showSearch" class="row map-search">
-<!--		<ngx-google-search (emitAddress)="search($event)" [height]="40"-->
-<!--						   [inputAddress]="placeholder"></ngx-google-search>-->
-	</div>
-</div>
-
-<div *ngIf="showPoints" [hidden]="true">
-	<nb-list *ngFor="let point of showPoints" [id]="point.id">
-		<nb-list-item class="d-flex p-1">
-			<span>Sequence</span>:&nbsp;<span>{{point.sequence}}</span>
-
-		</nb-list-item>
-		<nb-list-item class="d-flex p-1">
-			<span>Location</span>:&nbsp;<span>{{point.name}}</span>
-
-		</nb-list-item>
-		<nb-list-item class="d-flex p-1">
-			<span>Time Window</span>:&nbsp;<span>{{point.time_window}}</span>
-
-		</nb-list-item>
-		<nb-list-item class="d-flex p-1">
-			<span>Reached at</span>:&nbsp;<span>{{point.reach_time}}</span>
-
-		</nb-list-item>
-
-		<nb-list-item class="d-flex p-1">
-			<span>Exit at</span>:&nbsp;<span>{{point.exit_time}}</span>
-
-		</nb-list-item>
-	</nb-list>
-</div>
+		<!--		<ngx-google-search (emitAddress)="search($event)" [height]="40"-->
+		<!--						   [inputAddress]="placeholder"></ngx-google-search>-->
+			</div>
+		</div>
+		
+		<div *ngIf="showPoints" [hidden]="true">
+			<nb-list *ngFor="let point of showPoints" [id]="point.id">
+				<nb-list-item class="d-flex p-1">
+					<span>Sequence</span>:&nbsp;<span>{{point.sequence}}</span>
+		
+				</nb-list-item>
+				<nb-list-item class="d-flex p-1">
+					<span>Location</span>:&nbsp;<span>{{point.name}}</span>
+		
+				</nb-list-item>
+				<nb-list-item class="d-flex p-1">
+					<span>Time Window</span>:&nbsp;<span>{{point.time_window}}</span>
+		
+				</nb-list-item>
+				<nb-list-item class="d-flex p-1">
+					<span>Reached at</span>:&nbsp;<span>{{point.reach_time}}</span>
+		
+				</nb-list-item>
+		
+				<nb-list-item class="d-flex p-1">
+					<span>Exit at</span>:&nbsp;<span>{{point.exit_time}}</span>
+		
+				</nb-list-item>
+			</nb-list>
+		</div>
+		

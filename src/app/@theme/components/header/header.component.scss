@@ -6,7 +6,10 @@
 	display: flex;
 	justify-content: space-between;
 	width: 100%;
-
+	.right {
+		order: 1;
+		flex-direction: row-reverse;
+	  }
 	.logo-container {
 		display: flex;
 		align-items: center;

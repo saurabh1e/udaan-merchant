@@ -11,6 +11,9 @@ import {CoreModule} from './@core/core.module';
 import {ThemeModule} from './@theme/theme.module';
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
+import {environment} from '../environments/environment';
+import {AngularFireStorageModule} from '@angular/fire/storage';
+
 import {
 	NbChatModule,
 	NbDatepickerModule,
@@ -27,6 +30,7 @@ import {DataService} from './@core/utils/data.service';
 import {AuthGuard} from './@core/utils/auth-gaurd.service';
 import {UserService} from './@core/utils/user.service';
 import {RoleProvider} from './@core/utils/role-provider.service';
+import { AngularFireModule } from '@angular/fire';
 
 @NgModule({
 	declarations: [AppComponent],
@@ -35,7 +39,8 @@ import {RoleProvider} from './@core/utils/role-provider.service';
 		BrowserAnimationsModule,
 		HttpClientModule,
 		AppRoutingModule,
-
+		AngularFireStorageModule,
+		AngularFireModule.initializeApp(environment.firebaseConfig),
 		ThemeModule.forRoot(),
 
 		NbSidebarModule.forRoot(),

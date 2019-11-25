@@ -5,7 +5,7 @@ import {ThemeModule} from '../@theme/theme.module';
 import {PagesComponent} from './pages.component';
 import {DashboardModule} from './dashboard/dashboard.module';
 import {PagesRoutingModule} from './pages-routing.module';
-import {LeafletModule} from "@asymmetrik/ngx-leaflet";
+import {LeafletModule} from '@asymmetrik/ngx-leaflet';
 
 @NgModule({
 	imports: [

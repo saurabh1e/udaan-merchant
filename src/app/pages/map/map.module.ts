@@ -19,6 +19,7 @@ import {
 	NbTooltipModule,
 	NbUserModule,
 	NbWindowModule,
+	NbActionsModule,
 } from '@nebular/theme';
 import {PoiComponent} from './poi/poi.component';
 import {DeviceListComponent} from './device-list/device-list.component';
@@ -59,6 +60,7 @@ import {NbSecurityModule} from '@nebular/security';
 		NbDatepickerModule,
 		NbSelectModule,
 		NbButtonModule,
+		NbActionsModule,
 	],
 	exports: [RequestDialogComponent],
 })

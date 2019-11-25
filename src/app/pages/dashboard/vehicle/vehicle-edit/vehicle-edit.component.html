@@ -131,9 +131,28 @@
 
 					<div class="form-group">
 						<label>Model</label>
-						<input #model=ngModel [(ngModel)]="vehicle.model" fullWidth minlength="4" name="model" nbInput
-							   shape="rectangle" status="primary" type="text">
-					</div>
+			<!--            <input #model=ngModel [(ngModel)]="vehicle.model" fullWidth minlength="4" name="model" nbInput-->
+			<!--                   shape="rectangle" status="primary" type="text">-->
+			
+						  <nb-select #model=ngModel [(ngModel)]="vehicle.model" fullWidth name="model"
+									 placeholder="Select Model" size="small">
+							  <nb-option value="TATA Intra">TATA Intra</nb-option>
+							  <nb-option value="TATA Ace">TATA Ace</nb-option>
+							  <nb-option value="TATA Super">TATA Super</nb-option>
+							  <nb-option value="TATA Mega XL">TATA Mega XL</nb-option>
+							  <nb-option value="TATA 407">TATA 407</nb-option>
+							  <nb-option value="TATA Zip">TATA Zip</nb-option>
+							  <nb-option value="TATA Yodha">TATA Yodha</nb-option>
+							  <nb-option value="Mahindra Bolero">Mahindra Bolero</nb-option>
+							  <nb-option value="Mahindra Pickup">Mahindra Pickup</nb-option>
+							  <nb-option value="Mahindra Maxximo">Mahindra Maxximo</nb-option>
+							  <nb-option value="Mahindra Zito">Mahindra Zito</nb-option>
+							  <nb-option value="PIAGGO Ape">PIAGGO Ape</nb-option>
+							  <nb-option value="Ashok Leyland Dost">Ashok Leyland Dost</nb-option>
+							  <nb-option value="Atul Shakti">Atul Shakti</nb-option>
+			
+						  </nb-select>
+					  </div>
 
 					<div class="form-group">
 						<label>Manufacturing Year</label>
@@ -301,7 +320,7 @@
 			</nb-card-footer>
 		</nb-card>
 
-		<nb-card>
+		<!-- <nb-card>
 			<nb-card-header>5. Complete Onboarding</nb-card-header>
 			<nb-card-body class="p-4">
 				<form #finalOnBoarding=ngForm class="form form-horizontal">
@@ -433,7 +452,7 @@
 					</button>
 				</div>
 			</nb-card-footer>
-		</nb-card>
+		</nb-card> -->
 
 	</div>
 	<div class="col-sm-4">

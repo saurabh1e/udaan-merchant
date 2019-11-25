@@ -26,6 +26,7 @@ import {
 	LayoutDirectionSwitcherComponent,
 	SearchInputComponent,
 	SwitcherComponent,
+	DialogComponent,
 } from './components';
 import {CapitalizePipe, NumberWithCommasPipe, PluralPipe, RoundPipe, TimingPipe,} from './pipes';
 import {OneColumnLayoutComponent, ThreeColumnsLayoutComponent, TwoColumnsLayoutComponent,} from './layouts';
@@ -75,6 +76,7 @@ const COMPONENTS = [
 	TypeAheadComponent,
 	UserListComponent,
 	FileUploadComponent,
+	DialogComponent,
 ];
 const PIPES = [
 	CapitalizePipe,
@@ -94,6 +96,7 @@ const ANGULAR_MODULES = [
 	imports: [CommonModule, ...NB_MODULES, ...ANGULAR_MODULES, NbCardModule],
 	exports: [CommonModule, ...PIPES, ...COMPONENTS],
 	declarations: [...COMPONENTS, ...PIPES],
+	entryComponents: [DialogComponent],
 })
 
 export class ThemeModule {
@@ -103,7 +106,7 @@ export class ThemeModule {
 			providers: [
 				...NbThemeModule.forRoot(
 					{
-						name: 'default',
+						name: 'corporate',
 					},
 					[DEFAULT_THEME, COSMIC_THEME, CORPORATE_THEME, DARK_THEME],
 				).providers,
