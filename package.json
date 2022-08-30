@@ -73,7 +73,7 @@
 		"leaflet.markercluster": "^1.4.1",
 		"leaflet.measurecontrol": "^1.1.0",
 		"moment": "^2.24.0",
-		"moment-timezone": "^0.5.26",
+		"moment-timezone": "^0.5.35",
 		"nebular-icons": "1.1.0",
 		"ng-pick-datetime": "^7.0.0",
 		"node-sass": "^4.12.0",
